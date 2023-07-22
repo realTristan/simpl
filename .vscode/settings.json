@@ -1,5 +1,7 @@
 {
     "files.associations": {
-        "string": "cpp"
+        "string": "cpp",
+        "token.h": "c",
+        "token_type.h": "c"
     }
 }

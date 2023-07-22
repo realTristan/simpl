@@ -2,7 +2,7 @@
 #define TOKEN_H
 
 #include "token_type.h"
-#include "types.h"
+#include "../../common/types.h"
 
 /**
  * @brief A token is a pair of a token type and a value.

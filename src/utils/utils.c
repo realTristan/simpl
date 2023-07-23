@@ -15,8 +15,7 @@
  */
 bool is_int(char *s)
 {
-    long long len = strlen(s);
-    for (int i = 0; i < len; i++)
+    for (int i = 0; i < strlen(s); i++)
     {
         if (s[i] < '0' || s[i] > '9')
         {

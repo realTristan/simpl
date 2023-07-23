@@ -8,7 +8,7 @@
 int main(void)
 {
     // The source code
-    char *src = "let x = 45 ";
+    char *src = "let x = 45 * ( 10 - 2 )";
 
     // Tokenize the source
     int token_count = 0;

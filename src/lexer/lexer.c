@@ -8,7 +8,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define f f_real_name
+#define f push_back_token
 /**
  * @brief Pushes a token to the back of a token array.
  *
@@ -92,9 +92,25 @@ Token *tokenize(char *src, int *token_count)
             break;
         case '/':
             tokens = push_back_token(tokens, (Token){TOKEN_TYPE_DIVIDE, "/"}, token_count);
-            break;
         default:
-            printf("Unknown Token: [%s]\n", token);
+            if (is_int(token))
+            {
+                // Push the token to the tokens array
+                tokens = push_back_token(tokens, (Token){TOKEN_TYPE_NUMBER, token}, token_count);
+            }
+            else if (is_alpha(token))
+            {
+                if (strcmp(token, TOKEN_KEYWORD_LET) == 0)
+                {
+                    tokens = push_back_token(tokens, (Token){TOKEN_TYPE_LET, token}, token_count);
+                }
+            }
+            else
+            {
+                // Print an error
+                printf("Unknown token: [%s]\n", token);
+                exit(1);
+            }
             break;
         }
     }

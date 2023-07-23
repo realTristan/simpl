@@ -97,7 +97,7 @@ Token *tokenize(string src, int *token_count)
             tokens = push_back_token(tokens, (Token){TOKEN_TYPE_DIVIDE, "/"}, token_count);
             break;
         default:
-            printf("Unknown token: %s\n", token);
+            printf("Unknown Token: [%s]\n", token);
             break;
         }
     }

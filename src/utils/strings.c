@@ -83,7 +83,11 @@ string *split(string src, char delim, int *count)
             // Get the value from the last index to the current index
             char *tmp = malloc(sizeof(char) * (i - last_index));
             for (unsigned int j = last_index; j < i + is_last; j++)
-                tmp[j - last_index] = src[j];
+                {
+                    if (src[j] == delim)
+                        break;
+                    tmp[j - last_index] = src[j];
+                }
             tmp[i - last_index + is_last] = '\0';
 
             // Add the tmp to the result array

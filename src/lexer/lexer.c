@@ -117,7 +117,8 @@ Token *tokenize(char *src, size_t *tokens_size)
     free(split_tokens);
 
     // Return the tokens
-    return tokens;
+    return push_back_token(
+        tokens, (Token){TOKEN_TYPE_EOF, "EOF"}, tokens_size);
 }
 
 #endif // LEXER_C

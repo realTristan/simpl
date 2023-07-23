@@ -1,5 +1,5 @@
-#ifndef NODE_TYPES_H
-#define NODE_TYPES_H
+#ifndef NODE_TYPE_H
+#define NODE_TYPE_H
 
 /**
  * @brief The type of a node.
@@ -61,4 +61,4 @@ typedef enum NodeType {
     NODE_TYPE_ARRAY_SPLICE,
 } NodeType;
 
-#endif // NODE_TYPES_H
+#endif // NODE_TYPE_H

@@ -101,7 +101,7 @@ Token *tokenize(char *src, size_t *tokens_size)
             {
                 if (strcmp(token, TOKEN_KEYWORD_LET) == 0)
                 {
-                    tokens = push_back_token(tokens, (Token){TOKEN_TYPE_LET, token}, tokens_size);
+                    tokens = push_back_token(tokens, (Token){TOKEN_TYPE_IDENTIFIER, token}, tokens_size);
                 }
             }
             else

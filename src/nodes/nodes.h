@@ -1,5 +1,5 @@
-#ifndef NODE_H
-#define NODE_H
+#ifndef NODES_H
+#define NODES_H
 
 #include "node_type.h"
 #include <stdlib.h>
@@ -11,6 +11,7 @@
 typedef struct Stmt
 {
     NodeType type;
+    char *value;
 } Stmt;
 
 /**
@@ -20,8 +21,8 @@ typedef struct Stmt
 typedef struct Program
 {
     NodeType NODE_TYPE_PROGRAM;
-    Stmt **statements;
-    size_t num_statements;
+    Stmt **body;
+    size_t body_size;
 } Program;
 
 /**
@@ -31,6 +32,7 @@ typedef struct Program
 typedef struct Expr
 {
     NodeType type;
+    char* value;
 } Expr;
 
 /**
@@ -65,4 +67,4 @@ typedef struct NumericLiteral
     double value;
 } NumericLiteral;
 
-#endif // NODE_H
+#endif // NODES_H

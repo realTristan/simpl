@@ -13,7 +13,6 @@
  */
 typedef enum TokenType
 {
-    TOKEN_TYPE_LET,
     TOKEN_TYPE_NUMBER,
     TOKEN_TYPE_PLUS,
     TOKEN_TYPE_MINUS,

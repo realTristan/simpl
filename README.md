@@ -1,4 +1,4 @@
-# simpl ![Stars](https://img.shields.io/github/stars/simpl/WinGL?color=brightgreen) ![Watchers](https://img.shields.io/github/watchers/simpl/WinGL?label=Watchers)
+# simpl ![Stars](https://img.shields.io/github/stars/realTristan/simpl?color=brightgreen) ![Watchers](https://img.shields.io/github/watchers/realTristan/simpl?label=Watchers)
 ![image](https://github.com/realTristan/simpl/assets/75189508/67361db9-f3f6-4e55-ab95-4580addc40fd)
 
 # Todo

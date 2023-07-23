@@ -71,7 +71,7 @@ char **split_str(char *s, char delim, int *count)
         if (s[i] == delim || is_last)
         {
             // Get the value from the last index to the current index
-            char *tmp = malloc(sizeof(char) * (i - last_index));
+            char *tmp = malloc(sizeof(char) * (i - last_index + is_last));
             for (unsigned int j = last_index; j < i + is_last; j++)
             {
                 if (s[j] == delim)

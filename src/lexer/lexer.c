@@ -1,8 +1,7 @@
 #ifndef LEXER_C
 #define LEXER_C
 
-#include "token/token.h"
-#include "token/token_type.h"
+#include "token.h"
 
 #include "../common/types.h"
 #include "../utils/strings.h"
@@ -10,33 +9,39 @@
 
 #include <string.h>
 #include <stdio.h>
+#include <stdlib.h>
 
+#define f f_real_name
 /**
  * @brief Pushes a token to the back of a token array.
  *
  * @param tokens The token array.
  * @param token The token to push.
+ * @param token_count The amount of tokens.
  */
-void push_back(Token tokens[], Token token)
+Token *push_back_token(Token *tokens, Token token, int *token_count)
 {
-    tokens[sizeof(tokens) + 1] = token;
-}
-
-/**
- * @brief Pops a token from the front of a token array.
- *
- * @param tokens The token array.
- * @return Token The popped token.
- */
-string pop(string *tokens)
-{
-    string res = tokens[0];
-    for (int i = 1; i < sizeof(tokens); i++)
+    // Create a new array of tokens with +1 length
+    Token *new_tokens = malloc(sizeof(Token) * (*token_count + 1));
+    // Copy the old tokens to the new tokens
+    for (int i = 0; i < *token_count; i++)
     {
-        tokens[i - 1] = tokens[i];
+        new_tokens[i] = tokens[i];
     }
-    return res;
+
+    // Add the new token to the end of the new tokens
+    new_tokens[*token_count] = token;
+
+    // Update the token count
+    *token_count += 1;
+
+    // Free the old tokens
+    free(tokens);
+
+    // Return the new tokens
+    return new_tokens;
 }
+#undef f
 
 /**
  * @brief Tokenizes a string.
@@ -44,90 +49,63 @@ string pop(string *tokens)
  * @param src The string to tokenize.
  * @return const Token* The tokens.
  */
-Token *tokenize(string src)
+Token *tokenize(string src, int *token_count)
 {
-    // The list of tokens
-    Token tokens[] = {};
-
     // Split the src
-    string *split_src = split(src, " ");
+    int split_count = 0;
+    int split_tokens_index = 0;
+
+    // Split the src by spaces
+    string *split_tokens = split(src, ' ', &split_count);
+
+    // The list of tokens
+    Token *tokens = malloc(sizeof(Token) * split_count);
 
     // Build each token
-    while (sizeof(split_src) > 0)
+    while (split_tokens_index < split_count)
     {
         // Pop the token
-        string token = pop(split_src);
+        string token = split_tokens[split_tokens_index];
+        split_tokens_index++;
 
         // Check the token type
-        if (token == ' ' || token == '\n' || token == '\t')
+        switch (token[0])
         {
+        case ' ':
+        case '\n':
+        case '\t':
             continue;
-        }
-        else if (token == '(')
-        {
-            push_back(tokens, (Token){TOKEN_TYPE_LEFT_PAREN, "("});
-        }
-        else if (token == ')')
-        {
-            push_back(tokens, (Token){TOKEN_TYPE_RIGHT_PAREN, ")"});
-        }
-        else if (token == '=')
-        {
-            push_back(tokens, (Token){TOKEN_TYPE_EQUAL, "="});
-        }
-        else if (token == '+')
-        {
-            push_back(tokens, (Token){TOKEN_TYPE_PLUS, "+"});
-        }
-        else if (token == '-')
-        {
-            push_back(tokens, (Token){TOKEN_TYPE_MINUS, "-"});
-        }
-        else if (token == '*')
-        {
-            push_back(tokens, (Token){TOKEN_TYPE_MULTIPLY, "*"});
-        }
-        else if (token == '/')
-        {
-            Token token = {TOKEN_TYPE_DIVIDE, "/"};
-            push_back(tokens, token);
-        }
-        else
-        {
-            if (is_int(token))
-            {
-                string num = "";
-                while (sizeof(split_src) > 0 && is_int(split_src[0]))
-                {
-                    string n = pop(split_src);
-                    num = strcat(num, n);
-                }
-                push_back(tokens, (Token){TOKEN_TYPE_NUMBER, num});
-            }
-            else if (is_alpha(token))
-            {
-                string str = "";
-                while (sizeof(split_src) > 0 && is_alpha(split_src[0]))
-                {
-                    string n = pop(split_src);
-                    str = strcat(str, n);
-                }
-                if (token == "let")
-                {
-                    push_back(tokens, (Token){TOKEN_TYPE_LET, "let"});
-                }
-                else
-                {
-                    push_back(tokens, (Token){TOKEN_TYPE_IDENTIFIER, str});
-                }
-            }
-            else
-            {
-                return tokens;
-            }
+        case TOKEN_TYPE_LEFT_PAREN_VALUE:
+            tokens = push_back_token(tokens, (Token){TOKEN_TYPE_LEFT_PAREN, "("}, token_count);
+            break;
+        case ')':
+            tokens = push_back_token(tokens, (Token){TOKEN_TYPE_RIGHT_PAREN, ")"}, token_count);
+            break;
+        case '=':
+            tokens = push_back_token(tokens, (Token){TOKEN_TYPE_EQUAL, "="}, token_count);
+            break;
+        case '+':
+            tokens = push_back_token(tokens, (Token){TOKEN_TYPE_PLUS, "+"}, token_count);
+            break;
+        case '-':
+            tokens = push_back_token(tokens, (Token){TOKEN_TYPE_MINUS, "-"}, token_count);
+            break;
+        case '*':
+            tokens = push_back_token(tokens, (Token){TOKEN_TYPE_MULTIPLY, "*"}, token_count);
+            break;
+        case '/':
+            tokens = push_back_token(tokens, (Token){TOKEN_TYPE_DIVIDE, "/"}, token_count);
+            break;
+        default:
+            printf("Unknown token: %s\n", token);
+            break;
         }
     }
 
+    // Free the split tokens
+    free(split_tokens);
+
+    // Return the tokens
     return tokens;
 }
 

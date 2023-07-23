@@ -1,5 +1,7 @@
-#ifndef TOKEN_TYPE_H
-#define TOKEN_TYPE_H
+#ifndef TOKEN_H
+#define TOKEN_H
+
+#include "../common/types.h"
 
 /**
  * @brief The type of a token.
@@ -65,6 +67,17 @@ typedef enum TokenType
     TOKEN_TYPE_UNKNOWN
 } TokenType;
 
+/**
+ * @brief A token is a pair of a token type and a value.
+ * 
+ * @param type The type of the token.
+ * @param value The value of the token.
+ */
+typedef struct Token
+{
+    TokenType type;
+    string value;
+} Token;
 
 //////////////////////////////////////
 //   The value of each token type   //
@@ -114,4 +127,10 @@ typedef enum TokenType
 #define TOKEN_TYPE_NEWLINE_VALUE '\n'
 #define TOKEN_TYPE_WHITESPACE_VALUE ' '
 
-#endif // TOKEN_TYPE_H
+//////////////////
+//   Keywords   //
+//////////////////
+
+#define TOKEN_KEYWORD_LET "let"
+
+#endif // TOKEN_H

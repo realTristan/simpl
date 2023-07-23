@@ -5,21 +5,22 @@
 #include <stdbool.h>
 
 /**
+ * @brief Checks if a string is alphabetical.
+ * 
+ * @param s The string to check.
+ * @return true If the string is alphabetical.
+ * @return false If the string is not alphabetical.
+ */
+bool is_alpha(string s);
+
+/**
  * @brief Splits a string by a delimiter.
  * 
  * @param src The string to split.
  * @param delim The delimiter to split by.
+ * @param count The amount of splits.
  * @return string* The split string.
  */
-string *split(string src, string delim);
+string *split(string src, char delim, int *count);
 
-/**
- * @brief Checks if a character is a digit.
- * 
- * @param c The character to check.
- * @return true If the character is a digit.
- * @return false If the character is not a digit.
- */
-bool is_alpha(char c);
-
-#endif // UTILS_STRING_H
+#endif // UTILS_STRINGS_H

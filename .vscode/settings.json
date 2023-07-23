@@ -2,6 +2,16 @@
     "files.associations": {
         "string": "cpp",
         "token.h": "c",
-        "token_type.h": "c"
+        "token_type.h": "c",
+        "types.h": "c",
+        "stdbool.h": "c",
+        "stdlib.h": "c",
+        "algorithm": "c",
+        "array": "cpp",
+        "compare": "cpp",
+        "functional": "cpp",
+        "tuple": "cpp",
+        "type_traits": "cpp",
+        "utility": "cpp"
     }
 }

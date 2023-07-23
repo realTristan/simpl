@@ -5,10 +5,16 @@
 
 int main(void)
 {
+    // The source code
     string src = "let x = 5";
-    Token *tokens = tokenize(src);
-    for (int i = 0; i < sizeof(tokens); i++)
+
+    // Tokenize the source
+    int token_count = 0;
+    Token *tokens = tokenize(src, &token_count);
+
+    // Print the tokens
+    for (int i = 0; i < token_count; i++)
     {
-        printf("Token: %s\n", tokens[i].value);
+        printf("Token (%d): [ %s ]\n", tokens[i].type, tokens[i].value);
     }
 }

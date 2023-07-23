@@ -95,7 +95,6 @@ Token *tokenize(char *src, int *token_count)
         default:
             if (is_int(token))
             {
-                // Push the token to the tokens array
                 tokens = push_back_token(tokens, (Token){TOKEN_TYPE_NUMBER, token}, token_count);
             }
             else if (is_alpha(token))
@@ -107,7 +106,6 @@ Token *tokenize(char *src, int *token_count)
             }
             else
             {
-                // Print an error
                 printf("Unknown token: [%s]\n", token);
                 exit(1);
             }

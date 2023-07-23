@@ -20,7 +20,7 @@ typedef struct Stmt
  */
 typedef struct Program
 {
-    NodeType NODE_TYPE_PROGRAM;
+    NodeType type; // NODE_TYPE_PROGRAM
     Stmt **body;
     size_t body_size;
 } Program;
@@ -41,7 +41,7 @@ typedef struct Expr
  */
 typedef struct BinaryExpr
 {
-    NodeType NODE_TYPE_BINARY_EXPRESSION;
+    NodeType type; // NODE_TYPE_BINARY_EXPRESSION
     Expr *left;
     Expr *right;
     char *op;
@@ -53,7 +53,7 @@ typedef struct BinaryExpr
  */
 typedef struct Identifier
 {
-    NodeType NODE_TYPE_IDENTIFIER;
+    NodeType type; // NODE_TYPE_IDENTIFIER
     char *symbol;
 } Identifier;
 

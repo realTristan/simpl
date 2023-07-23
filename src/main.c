@@ -5,11 +5,13 @@
 #include <stdlib.h>
 
 #include "lexer/lexer.h"
+#include "parser/parser.h"
 
 int main(void)
 {
     // The source code
-    char *src = "let x = 45 * ( 10 - 2 )";
+    // char *src = "let x = 45 * ( 10 - 2 )";
+    char *src = "10";
 
     // Tokenize the source
     size_t tokens_size = 0;
@@ -20,6 +22,9 @@ int main(void)
     {
         printf("Token (%d): [%s]\n", tokens[i].type, tokens[i].value);
     }
+
+    // Parse the tokens
+    parser(tokens, tokens_size);
 }
 
 #endif // MAIN

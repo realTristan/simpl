@@ -10,6 +10,7 @@
  * 
 */
 typedef enum NodeType {
+    NODE_TYPE_NUMERIC_LITERAL,
     NODE_TYPE_PROGRAM,
     NODE_TYPE_STATEMENT,
     NODE_TYPE_EXPRESSION,

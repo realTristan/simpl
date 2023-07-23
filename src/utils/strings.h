@@ -14,6 +14,15 @@
 bool is_alpha(string s);
 
 /**
+ * @brief Appends a character to a string.
+ *
+ * @param s The string to append to.
+ * @param c The character to append.
+ * @return string The appended string.
+ */
+string append_char(string s, char c);
+
+/**
  * @brief Splits a string by a delimiter.
  * 
  * @param src The string to split.

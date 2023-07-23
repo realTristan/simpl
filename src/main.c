@@ -6,7 +6,7 @@
 int main(void)
 {
     // The source code
-    string src = "let x = 5";
+    string src = "let x = 45";
 
     // Tokenize the source
     int token_count = 0;

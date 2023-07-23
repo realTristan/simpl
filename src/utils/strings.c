@@ -45,7 +45,7 @@ string append_char(string s, char c)
     // Copy the string to the result
     for (unsigned int i = 0; i < len; i++)
         res[i] = s[i];
-    
+
     // Append the character to the result
     res[len] = c;
     res[len + 1] = '\0';
@@ -68,7 +68,7 @@ string *split(string src, char delim, int *count)
     long long len = strlen(src);
 
     // Create the result array
-    string *res = malloc(sizeof(char) * len);
+    string *res = malloc(sizeof(string) * len);
 
     // Store the last index (for determining splits)
     int last_index = 0;
@@ -77,29 +77,28 @@ string *split(string src, char delim, int *count)
     for (unsigned int i = 0; i < len; i++)
     {
         // If the current character is the delimiter
-        if (src[i] == delim)
+        int is_last = (i + 1 == len);
+        if (src[i] == delim || is_last)
         {
             // Get the value from the last index to the current index
             char *tmp = malloc(sizeof(char) * (i - last_index));
-            for (unsigned int j = last_index; j < i; j++)
-            {
+            for (unsigned int j = last_index; j < i + is_last; j++)
                 tmp[j - last_index] = src[j];
-            }
-            tmp[i - last_index] = '\0';
+            tmp[i - last_index + is_last] = '\0';
 
             // Add the tmp to the result array
             res[*count] = tmp;
 
             // Update the last index
             last_index = i + 1;
-            
+
             // Increment the total split count
             *count = *count + 1;
         }
     }
 
     // Create a copy of the resutl array with only the correct size
-    string *final_res = malloc(*count);
+    string *final_res = malloc(*count * sizeof(string));
     for (unsigned int i = 0; i < *count; i++)
         final_res[i] = res[i];
 

@@ -1,12 +1,14 @@
+#ifndef MAIN
+#define MAIN
+
 #include <stdio.h>
 
 #include "lexer/lexer.h"
-#include "common/types.h"
 
 int main(void)
 {
     // The source code
-    string src = "let x = 45 ";
+    char *src = "let x = 45 ";
 
     // Tokenize the source
     int token_count = 0;
@@ -18,3 +20,5 @@ int main(void)
         printf("Token (%d): [%s]\n", tokens[i].type, tokens[i].value);
     }
 }
+
+#endif // MAIN

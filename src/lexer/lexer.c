@@ -1,11 +1,8 @@
 #ifndef LEXER_C
 #define LEXER_C
 
+#include "../utils/utils.h"
 #include "token.h"
-
-#include "../common/types.h"
-#include "../utils/strings.h"
-#include "../utils/ints.h"
 
 #include <string.h>
 #include <stdio.h>
@@ -49,14 +46,14 @@ Token *push_back_token(Token *tokens, Token token, int *token_count)
  * @param src The string to tokenize.
  * @return const Token* The tokens.
  */
-Token *tokenize(string src, int *token_count)
+Token *tokenize(char *src, int *token_count)
 {
     // Split the src
     int split_count = 0;
     int split_tokens_index = 0;
 
     // Split the src by spaces
-    string *split_tokens = split(src, ' ', &split_count);
+    char **split_tokens = split_str(src, ' ', &split_count);
 
     // The list of tokens
     Token *tokens = malloc(sizeof(Token) * split_count);
@@ -65,7 +62,7 @@ Token *tokenize(string src, int *token_count)
     while (split_tokens_index < split_count)
     {
         // Pop the token
-        string token = split_tokens[split_tokens_index];
+        char *token = split_tokens[split_tokens_index];
         split_tokens_index++;
 
         // Check the token type

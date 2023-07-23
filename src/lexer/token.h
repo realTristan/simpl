@@ -1,18 +1,16 @@
 #ifndef TOKEN_H
 #define TOKEN_H
 
-#include "../common/types.h"
-
 /**
  * @brief The type of a token.
- * 
+ *
  * @details
  * The type of a token is used to determine how to interpret the value of a token.
  * For example, if the type of a token is TOKEN_TYPE_NUMBER, then the value of the
  * token is a string representation of a number. If the type of a token is
  * TOKEN_TYPE_PLUS, then the value of the token is the string "+".
- * 
-*/
+ *
+ */
 typedef enum TokenType
 {
     TOKEN_TYPE_LET,
@@ -69,14 +67,14 @@ typedef enum TokenType
 
 /**
  * @brief A token is a pair of a token type and a value.
- * 
+ *
  * @param type The type of the token.
  * @param value The value of the token.
  */
 typedef struct Token
 {
     TokenType type;
-    string value;
+    char *value;
 } Token;
 
 //////////////////////////////////////

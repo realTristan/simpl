@@ -68,7 +68,7 @@ string *split(string src, char delim, int *count)
     long long len = strlen(src);
 
     // Create the result array
-    string *res = malloc(sizeof(string) * len);
+    string *res = malloc(sizeof(char) * len);
 
     // Store the last index (for determining splits)
     int last_index = 0;

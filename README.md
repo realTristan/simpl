@@ -6,9 +6,16 @@
 
 # Todo
 - [X] Lexer and Tokenizer
+- [ ] AST Types
+- [ ] AST Parser
+- [ ] Interpreter
+- [ ] Scope and Environments
 - [ ] Variables
-- [ ] Mathematics
-- [ ] Functions
+- [ ] Assignment
+- [ ] Object Values
+- [ ] Member and Calls
+- [ ] Native Methods
+- [ ] User Defined Functions
 
 # License
 MIT License

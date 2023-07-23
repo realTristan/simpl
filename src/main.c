@@ -2,6 +2,7 @@
 #define MAIN
 
 #include <stdio.h>
+#include <stdlib.h>
 
 #include "lexer/lexer.h"
 
@@ -11,11 +12,11 @@ int main(void)
     char *src = "let x = 45 * ( 10 - 2 )";
 
     // Tokenize the source
-    int token_count = 0;
-    Token *tokens = tokenize(src, &token_count);
+    size_t tokens_size = 0;
+    Token *tokens = tokenize(src, &tokens_size);
 
     // Print the tokens
-    for (int i = 0; i < token_count; i++)
+    for (int i = 0; i < tokens_size; i++)
     {
         printf("Token (%d): [%s]\n", tokens[i].type, tokens[i].value);
     }

@@ -5,8 +5,8 @@
 #include "token.h"
 
 #include <string.h>
-#include <stdio.h>
 #include <stdlib.h>
+#include <stdio.h>
 
 #define f push_back_token
 /**
@@ -14,23 +14,23 @@
  *
  * @param tokens The token array.
  * @param token The token to push.
- * @param token_count The amount of tokens.
+ * @param tokens_size The amount of tokens.
  */
-Token *push_back_token(Token *tokens, Token token, int *token_count)
+Token *push_back_token(Token *tokens, Token token, size_t *tokens_size)
 {
     // Create a new array of tokens with +1 length
-    Token *new_tokens = malloc(sizeof(Token) * (*token_count + 1));
+    Token *new_tokens = malloc(sizeof(Token) * (*tokens_size + 1));
     // Copy the old tokens to the new tokens
-    for (int i = 0; i < *token_count; i++)
+    for (int i = 0; i < *tokens_size; i++)
     {
         new_tokens[i] = tokens[i];
     }
 
     // Add the new token to the end of the new tokens
-    new_tokens[*token_count] = token;
+    new_tokens[*tokens_size] = token;
 
-    // Update the token count
-    *token_count += 1;
+    // Update the token size
+    *tokens_size += 1;
 
     // Free the old tokens
     free(tokens);
@@ -46,20 +46,20 @@ Token *push_back_token(Token *tokens, Token token, int *token_count)
  * @param src The string to tokenize.
  * @return const Token* The tokens.
  */
-Token *tokenize(char *src, int *token_count)
+Token *tokenize(char *src, size_t *tokens_size)
 {
     // Split the src
-    int split_count = 0;
+    size_t split_size = 0;
     int split_tokens_index = 0;
 
     // Split the src by spaces
-    char **split_tokens = split_str(src, ' ', &split_count);
+    char **split_tokens = split_str(src, ' ', &split_size);
 
     // The list of tokens
-    Token *tokens = malloc(sizeof(Token) * split_count);
+    Token *tokens = malloc(sizeof(Token) * split_size);
 
     // Build each token
-    while (split_tokens_index < split_count)
+    while (split_tokens_index < split_size)
     {
         // Pop the token
         char *token = split_tokens[split_tokens_index];
@@ -73,35 +73,35 @@ Token *tokenize(char *src, int *token_count)
         case '\t':
             continue;
         case TOKEN_TYPE_LEFT_PAREN_VALUE:
-            tokens = push_back_token(tokens, (Token){TOKEN_TYPE_LEFT_PAREN, "("}, token_count);
+            tokens = push_back_token(tokens, (Token){TOKEN_TYPE_LEFT_PAREN, "("}, tokens_size);
             break;
         case ')':
-            tokens = push_back_token(tokens, (Token){TOKEN_TYPE_RIGHT_PAREN, ")"}, token_count);
+            tokens = push_back_token(tokens, (Token){TOKEN_TYPE_RIGHT_PAREN, ")"}, tokens_size);
             break;
         case '=':
-            tokens = push_back_token(tokens, (Token){TOKEN_TYPE_EQUAL, "="}, token_count);
+            tokens = push_back_token(tokens, (Token){TOKEN_TYPE_EQUAL, "="}, tokens_size);
             break;
         case '+':
-            tokens = push_back_token(tokens, (Token){TOKEN_TYPE_PLUS, "+"}, token_count);
+            tokens = push_back_token(tokens, (Token){TOKEN_TYPE_PLUS, "+"}, tokens_size);
             break;
         case '-':
-            tokens = push_back_token(tokens, (Token){TOKEN_TYPE_MINUS, "-"}, token_count);
+            tokens = push_back_token(tokens, (Token){TOKEN_TYPE_MINUS, "-"}, tokens_size);
             break;
         case '*':
-            tokens = push_back_token(tokens, (Token){TOKEN_TYPE_MULTIPLY, "*"}, token_count);
+            tokens = push_back_token(tokens, (Token){TOKEN_TYPE_MULTIPLY, "*"}, tokens_size);
             break;
         case '/':
-            tokens = push_back_token(tokens, (Token){TOKEN_TYPE_DIVIDE, "/"}, token_count);
+            tokens = push_back_token(tokens, (Token){TOKEN_TYPE_DIVIDE, "/"}, tokens_size);
         default:
             if (is_int(token))
             {
-                tokens = push_back_token(tokens, (Token){TOKEN_TYPE_NUMBER, token}, token_count);
+                tokens = push_back_token(tokens, (Token){TOKEN_TYPE_NUMBER, token}, tokens_size);
             }
             else if (is_alpha(token))
             {
                 if (strcmp(token, TOKEN_KEYWORD_LET) == 0)
                 {
-                    tokens = push_back_token(tokens, (Token){TOKEN_TYPE_LET, token}, token_count);
+                    tokens = push_back_token(tokens, (Token){TOKEN_TYPE_LET, token}, tokens_size);
                 }
             }
             else

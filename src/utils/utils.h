@@ -2,6 +2,7 @@
 #define UTILS_H
 
 #include <stdbool.h>
+#include <stdlib.h>
 
 /**
  * @brief Checks if a character is an integer.
@@ -26,9 +27,9 @@ bool is_alpha(char *s);
  *
  * @param s The string to split.
  * @param delim The delimiter to split by.
- * @param count The amount of splits.
+ * @param size The amount of splits.
  * @return string* The split string.
  */
-char **split_str(char *s, char delim, int *count);
+char **split_str(char *s, char delim, size_t *size);
 
 #endif // UTILS_H

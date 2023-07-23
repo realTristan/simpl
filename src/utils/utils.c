@@ -4,7 +4,6 @@
 #include <stdbool.h>
 #include <string.h>
 #include <stdlib.h>
-#include <stdio.h>
 
 /**
  * @brief Checks if a character is an integer.
@@ -49,10 +48,10 @@ bool is_alpha(char *s)
  *
  * @param s The string to split.
  * @param delim The delimiter to split by.
- * @param count The amount of splits.
+ * @param size The amount of splits.
  * @return char** The split string.
  */
-char **split_str(char *s, char delim, int *count)
+char **split_str(char *s, char delim, size_t *size)
 {
     // Get the length of the src
     long long len = strlen(s);
@@ -81,19 +80,19 @@ char **split_str(char *s, char delim, int *count)
             tmp[i - last_index + is_last] = '\0';
 
             // Add the tmp to the result array
-            res[*count] = tmp;
+            res[*size] = tmp;
 
             // Update the last index
             last_index = i + 1;
 
-            // Increment the total split count
-            *count = *count + 1;
+            // Increment the total split size
+            *size = *size + 1;
         }
     }
 
     // Create a copy of the resutl array with only the correct size
-    char **final_res = malloc(*count * sizeof(char *));
-    for (unsigned int i = 0; i < *count; i++)
+    char **final_res = malloc(*size * sizeof(char *));
+    for (unsigned int i = 0; i < *size; i++)
         final_res[i] = res[i];
 
     // Free the res array

@@ -3,6 +3,9 @@
 
 # Todo
 - [ ] Lexer / Tokenizer
+- [ ] Variables
+- [ ] Mathematics
+- [ ] Functions
 
 # License
 MIT License

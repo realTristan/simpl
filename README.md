@@ -10,7 +10,8 @@
 # Todo
 - [X] Lexer and Tokenizer
 - [X] Node Types
-- [ ] AST Parser
+- [X] Abstract Syntax Tree
+- [X] Binary Operations
 - [ ] Interpreter
 - [ ] Scope and Environments
 - [ ] Variables
@@ -18,7 +19,7 @@
 - [ ] Object Values
 - [ ] Member and Calls
 - [ ] Native Methods
-- [ ] User Defined Functions
+- [ ] User-Defined Functions
 
 # License
 MIT License

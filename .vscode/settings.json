@@ -26,6 +26,8 @@
         "limits": "c",
         "ratio": "c",
         "vector": "c",
-        "chrono": "c"
+        "chrono": "c",
+        "node_structs.h": "c",
+        "node_type.h": "c"
     }
 }

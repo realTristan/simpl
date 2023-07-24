@@ -1,6 +1,7 @@
 #ifndef PARSER_C
 #define PARSER_C
 
+#include "../nodes/node_structs.h"
 #include "../nodes/nodes.h"
 #include "../lexer/lexer.h"
 
@@ -11,96 +12,34 @@
 #include <string.h>
 #include <stdio.h>
 
-#define f new_expr_node
-/**
- * @brief Creates a new expression.
- *
- * @param type The type of the expression.
- * @param token The token.
- * @return Expr*
- */
-Expr *new_expr_node(NodeType type, Token *token)
-{
-    Expr *expr = (Expr *)malloc(sizeof(Expr));
-    expr->type = type;
-    expr->value = token->value;
-    return expr;
-}
-#undef f
-
-#define f new_bin_expr_node
-/**
- * @brief Creates a new binary expression.
- *
- * @param left The left binary expression.
- * @param right The right expression.
- * @param op The operator.
- * @return Expr*
- */
-BinaryExpr *new_bin_expr_node(BinaryExpr *left, Expr *right, char *op)
-{
-    BinaryExpr *bin_expr = (BinaryExpr *)malloc(sizeof(BinaryExpr));
-    bin_expr->type = NODE_TYPE_BINARY_EXPRESSION;
-    bin_expr->left = left;
-    bin_expr->right = right;
-    bin_expr->op = op;
-    return bin_expr;
-}
-#undef f
-
-/*
-#define f new_identifier_node
-Identifier *new_identifier_node(Token *token)
-{
-    Identifier *identifier = (Identifier *)malloc(sizeof(Identifier));
-    identifier->type = NODE_TYPE_IDENTIFIER;
-    identifier->value = token->value;
-    return identifier;
-}
-#undef f
-
-#define f new_numeric_literal_node
-NumericLiteral *new_numeric_literal_node(Token *token)
-{
-    NumericLiteral *numeric_literal = (NumericLiteral *)malloc(sizeof(NumericLiteral));
-    numeric_literal->type = NODE_TYPE_NUMERIC_LITERAL;
-    numeric_literal->value = token->value;
-    return numeric_literal;
-}
-#undef f
-*/
-
-#define f parse_primary_stmt
+#define f parse_token_stmt
 /**
  * @brief Parses a primary expression.
  *
- * @param tokens The tokens array.
- * @param index The current index.
+ * @param token The token.
  * @return Stmt*
  */
-Stmt *parse_primary_stmt(Token **tokens, int *index)
+Stmt *parse_token_stmt(Token *token)
 {
-    // Token and Statement pointers
-    Token *token = tokens[*index];
-    Stmt *stmt = malloc(sizeof(Stmt));
-
     // Check the token type
     switch (token->type)
     {
+    // These return a NODE_TYPE_REGULAR_EXPRESSION Statement
+    // This is used for determining (so far) how to print the stmt
     case TOKEN_TYPE_IDENTIFIER:
-        stmt->expr = new_expr_node(NODE_TYPE_IDENTIFIER, token);
-        return stmt;
+        // The provided type gets set to the stmt->expr->type
+        // This will be used when walking the AST
+        return new_expr_stmt(NODE_TYPE_IDENTIFIER, token->value);
     case TOKEN_TYPE_NUMBER:
-        stmt->expr = new_expr_node(NODE_TYPE_NUMERIC_LITERAL, token);
-        return stmt;
+        return new_expr_stmt(NODE_TYPE_NUMERIC_LITERAL, token->value);
+    
+    // These return a NODE_TYPE_BINARY_EXPRESSION Statement
     case TOKEN_TYPE_PLUS:
     case TOKEN_TYPE_MINUS:
     case TOKEN_TYPE_MULTIPLY:
     case TOKEN_TYPE_DIVIDE:
-        stmt->expr = new_expr_node(NODE_TYPE_BINARY_EXPRESSION, token);
-        return stmt;
+        return new_bin_expr_stmt(NULL, NULL, token->value);
     default:
-        free(stmt);
         return NULL;
     }
 }
@@ -118,7 +57,7 @@ Stmt *parse_primary_stmt(Token **tokens, int *index)
 Stmt *parse_multiplicative_stmt(Token **tokens, int *index)
 {
     // Get the first token
-    Stmt *res = parse_primary_stmt(tokens, index);
+    Stmt *res = parse_token_stmt(tokens[*index]);
 
     // While (true)
     for (;;)
@@ -135,13 +74,14 @@ Stmt *parse_multiplicative_stmt(Token **tokens, int *index)
         (*index)++;
 
         // Parse the next token
-        Stmt *right = parse_primary_stmt(tokens, index);
+        Stmt *right = parse_token_stmt(tokens[*index]);
 
-        // Create a new binary expression
-        if (res->expr != NULL)
-            res->bin_expr = new_bin_expr_node(NULL, res->expr, op->value);
-        res->bin_expr = new_bin_expr_node(res->bin_expr, right->expr, op->value);
-        res->expr = NULL;
+        // Set to a binary expression
+        if (res->type == NODE_TYPE_REGULAR_EXPRESSION)
+            set_stmt_to_binary_expr(res, new_bin_expr_stmt(NULL, res->expr, NULL)->bin_expr);
+
+        // Update the binary expression
+        res->bin_expr = new_bin_expr_stmt(res->bin_expr, right->expr, op->value)->bin_expr;
     }
 
     // Return the result statement
@@ -175,28 +115,21 @@ Stmt *parse_additive_stmt(Token **tokens, int *index)
         (*index)++;
 
         // Parse the next token
-        Stmt *right = parse_primary_stmt(tokens, index);
+        Stmt *right = parse_token_stmt(tokens[*index]);
 
-        // Create a new binary expression
-        if (res->expr != NULL)
-            res->bin_expr = new_bin_expr_node(NULL, res->expr, op->value);
-        res->bin_expr = new_bin_expr_node(res->bin_expr, right->expr, op->value);
+        // Set to a binary expression
+        if (res->type == NODE_TYPE_REGULAR_EXPRESSION)
+            set_stmt_to_binary_expr(res, new_bin_expr_stmt(NULL, res->expr, NULL)->bin_expr);
+
+        // Update the binary expression
+        res->bin_expr = new_bin_expr_stmt(res->bin_expr, right->expr, op->value)->bin_expr;
 
         // Increment the index to go back to the middle token
         (*index)++;
     }
 
-    // Free opposite expressions
-    if (res->bin_expr != NULL)
-    {
-        free(res->expr);
-        res->expr = NULL;
-    }
-    if (res->expr != NULL)
-    {
-        free(res->bin_expr);
-        res->bin_expr = NULL;
-    }
+    // Free opposite expressions (Unnecessary with set_stmt_to_binary_expr)
+    // free_stmt_unused_mem(res);
 
     // Return the result statement
     return res;

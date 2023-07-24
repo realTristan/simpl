@@ -1,67 +1,53 @@
-#ifndef NODES_H
-#define NODES_H
+#ifndef NODES_C
+#define NODES_C
 
 #include "node_type.h"
+#include "node_structs.h"
+
+#include <stdbool.h>
 #include <stdlib.h>
-/*
-typedef struct NumericLiteral
-{
-    NodeType type; // NODE_TYPE_NUMERIC_LITERAL
-    char *value;
-} NumericLiteral;
-
-typedef struct Identifier
-{
-    NodeType type; // NODE_TYPE_IDENTIFIER
-    char *value;
-} Identifier;
-*/
 
 /**
- * @brief An expression node.
+ * @brief Creates a new expression node.
  *
+ * @param type The type of the expression.
+ * @param value The value of the expression.
+ * @return Expr*
  */
-typedef struct Expr
-{
-    NodeType type; // NODE_TYPE_EXPRESSION
-    char *value;
-} Expr;
+Stmt *new_expr_stmt(NodeType type, char *value);
 
 /**
- * @brief A binary expression node.
+ * @brief Creates a new binary expression node.
  *
+ * @param left The left binary expression.
+ * @param right The right expression.
+ * @param op The operator.
+ * @return Expr*
  */
-typedef struct BinaryExpr
-{
-    NodeType type; // NODE_TYPE_BINARY_EXPRESSION
-
-    struct BinaryExpr *left;
-    struct Expr *right;
-
-    char *op;
-} BinaryExpr;
+Stmt *new_bin_expr_stmt(BinaryExpr *left, RegularExpr *right, char *op);
 
 /**
- * @brief A statement node.
- *
+ * @brief Set the stmt to binary expr object 
+ * 
+ * @param stmt The statement.
+ * @param bin_expr The binary expression.
  */
-typedef struct Stmt
-{
-    struct Expr *expr;
-    struct BinaryExpr *bin_expr;
-    // struct NumericLiteral *numeric_literal;
-    // struct Identifier *identifier;
-} Stmt;
+void set_stmt_to_binary_expr(Stmt *stmt, BinaryExpr *bin_expr);
 
 /**
- * @brief A program node.
- *
+ * @brief Set the stmt to expr object 
+ * 
+ * @param stmt The statement.
+ * @param expr The expression.
  */
-typedef struct Program
-{
-    NodeType type; // NODE_TYPE_PROGRAM
-    Stmt **body;
-    size_t body_size;
-} Program;
+void set_stmt_to_expr(Stmt *stmt, RegularExpr *expr);
 
-#endif // NODES_H
+/**
+ * @brief Frees a statement's unused memory.
+ *
+ * @param stmt The statement.
+ * @return void
+ */
+void free_stmt_unused_mem(Stmt *stmt);
+
+#endif // NODES_C

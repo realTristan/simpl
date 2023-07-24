@@ -3,18 +3,23 @@
 
 /**
  * @brief The type of a node.
- * 
+ *
  * @details
  * The type of a node is used to determine what kind of node it is.
  * This is useful for determining how to handle a node.
- * 
-*/
-typedef enum NodeType {
-    NODE_TYPE_NUMERIC_LITERAL,
+ *
+ */
+typedef enum NodeType
+{
+    // Currently in use
     NODE_TYPE_PROGRAM,
-    NODE_TYPE_STATEMENT,
-    NODE_TYPE_EXPRESSION,
+    NODE_TYPE_BINARY_EXPRESSION,
+    NODE_TYPE_REGULAR_EXPRESSION,
+    NODE_TYPE_NUMERIC_LITERAL,
     NODE_TYPE_IDENTIFIER,
+
+    // Currently Unused
+    NODE_TYPE_STATEMENT,
     NODE_TYPE_INTEGER_LITERAL,
     NODE_TYPE_STRING_LITERAL,
     NODE_TYPE_BOOLEAN_LITERAL,
@@ -25,7 +30,6 @@ typedef enum NodeType {
     NODE_TYPE_VARIABLE_DECLARATION,
     NODE_TYPE_VARIABLE_ASSIGNMENT,
     NODE_TYPE_VARIABLE_REFERENCE,
-    NODE_TYPE_BINARY_EXPRESSION,
     NODE_TYPE_UNARY_EXPRESSION,
     NODE_TYPE_CONDITIONAL_EXPRESSION,
     NODE_TYPE_CONDITIONAL_STATEMENT,

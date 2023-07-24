@@ -1,6 +1,7 @@
 #ifndef PARSER_UTILS_C
 #define PARSER_UTILS_C
 
+#include "../nodes/node_structs.h"
 #include "../nodes/nodes.h"
 
 #include <stdio.h>
@@ -19,51 +20,44 @@
  *
  */
 
-#define f print_bin_expr_2
 /**
- * @brief Prints a binary expression.
- *
- * @param bin_expr The binary expression.
- * @param span The span.
- * @return void
+ * @brief Builds the padding
+ * 
+ * @param lPadding The left padding
+ * 
  */
-void print_bin_expr_2(BinaryExpr *bin_expr, char *span)
+char* build_padding(int lPadding)
 {
-    printf("%sBinaryExpr {\n", span);
-    printf("%s  type: %d\n", span, bin_expr->type);
-    printf("%s  left: {\n", span);
-    printf("%s    type: %d\n", span, bin_expr->left->type);
-    printf("%s    left: {\n", span);
-    printf("%s      type: %d\n", span, bin_expr->left->left->type);
-    printf("%s      value: \"%s\"\n", span, bin_expr->left->right->value);
-    printf("%s    }\n", span);
-    printf("%s    right: {\n", span);
-    printf("%s      type: %d\n", span, bin_expr->left->right->type);
-    printf("%s      value: \"%s\"\n", span, bin_expr->left->right->value);
-    printf("%s    }\n", span);
-    printf("%s    op: \"%s\"\n", span, bin_expr->left->op);
-    printf("%s  }\n", span);
-    printf("%s  right: {\n", span);
-    printf("%s    type: %d\n", span, bin_expr->right->type);
-    printf("%s    value: \"%s\"\n", span, bin_expr->right->value);
-    printf("%s  }\n", span);
-    printf("%s  op: \"%s\"\n", span, bin_expr->op);
-    printf("%s}\n", span);
+    char* padding = (char*)malloc(sizeof(char) * lPadding);
+    for (int i = 0; i < lPadding; i++)
+    {
+        padding[i] = ' ';
+    }
+    padding[lPadding] = '\0';
+    return padding;
 }
-#undef f
 
-#define f print_bin_expr
 /**
  * @brief Prints a binary expression.
  *
  * @param bin_expr The binary expression.
+ * @param lPadding The left padding.
  * @return void
  */
-void print_bin_expr(BinaryExpr *bin_expr)
+void print_bin_expr(BinaryExpr *bin_expr, int lPadding)
 {
-    printf("\n    {\n      type: %d\n      left: {\n        type: \"%d\",\n        value: \"%s\"\n      },\n", bin_expr->type, bin_expr->left->right->type, bin_expr->left->right->value);
-    printf("      right: {\n        type: \"%d\",\n        value: \"%s\"\n      },\n", bin_expr->right->type, bin_expr->right->value);
-    printf("      op: \"%s\"\n    }", bin_expr->op);
+    char* padding = build_padding(lPadding);
+    printf("%sBinaryExpr {\n", padding);
+    printf("%s  left: {\n", padding);
+    printf("%s    type: %d\n", padding, bin_expr->left->right->type);
+    printf("%s    value: \"%s\"\n", padding, bin_expr->left->right->value);
+    printf("%s  }\n", padding);
+    printf("%s  right: {\n", padding);
+    printf("%s    type: %d\n", padding, bin_expr->right->type);
+    printf("%s    value: \"%s\"\n", padding, bin_expr->right->value);
+    printf("%s  }\n", padding);
+    printf("%s  op: \"%s\"\n", padding, bin_expr->op);
+    printf("%s}\n", padding);
 }
 
 /**
@@ -77,17 +71,17 @@ void print_program(Program *program)
     printf(",\n  body: [\n");
     for (int i = 0; i < program->body_size; i++)
     {
-        if (program->body[i]->expr != NULL)
-            printf("\n    {\n      type: %d\n      value: \"%s\"\n    }", program->body[i]->expr->type, program->body[i]->expr->value);
-
-        if (program->body[i]->bin_expr != NULL)
-            print_bin_expr(program->body[i]->bin_expr);
-            // print_bin_expr_2(program->body[i]->bin_expr, "    ");
-
-        // Print a comma if not the last element
-        if (i != program->body_size - 1)
+        // Print the statement
+        Stmt *stmt = program->body[i];
+        if (stmt->type == NODE_TYPE_REGULAR_EXPRESSION)
         {
-            printf(",");
+            printf("    {\n      type: \"%d\"", stmt->type);
+            printf(",\n      expr: {\n        value: \"%s\"\n      }\n    },\n", stmt->expr->value);
+        }
+        else if (stmt->type == NODE_TYPE_BINARY_EXPRESSION)
+        {
+            print_bin_expr(stmt->bin_expr, 4);
+            continue;
         }
     }
     printf("\n  ]\n}\n");

@@ -12,30 +12,21 @@
  */
 void print_program(Program *program)
 {
-    printf("{ type:\"%d\"", program->type);
-    printf(", body:[");
+    printf("{\n  type: \"%d\"", program->type);
+    printf(",\n  body: [");
     for (int i = 0; i < program->body_size; i++)
     {
-        // Print the expressions
-        /*
-            NodeType type;
-            char *value;
-
-            // Binary Expressions
-            struct Expr *left;
-            struct Expr *right;
-            char *op;
-        */
-        if (program->body[i]->type != NODE_TYPE_BINARY_EXPRESSION)
+        if (program->body[i]->expr != NULL)
         {
-            printf("{ type:\"%d\", value:\"%s\" }", program->body[i]->type, program->body[i]->value);
+            printf("\n    {\n      type: %d\n      value: \"%s\"\n    }", program->body[i]->expr->type, program->body[i]->expr->value);
         }
-        else
+
+        if (program->body[i]->bin_expr != NULL)
         {
-            printf("{ left:{ type:\"%d\", value:\"%s\" }, right:{ type:\"%d\", value:\"%s\" }, op:\"%s\" }",
-                   program->body[i]->left->type, program->body[i]->left->value,
-                   program->body[i]->right->type, program->body[i]->right->value,
-                   program->body[i]->op);
+            BinaryExpr *bin_expr = program->body[i]->bin_expr;
+            printf("\n    {\n      type: %d\n      left: {\n        type: \"%d\",\n        value: \"%s\"\n      },\n", bin_expr->type, bin_expr->left->right->type, bin_expr->left->right->value);
+            printf("      right: {\n        type: \"%d\",\n        value: \"%s\"\n      },\n", bin_expr->right->type, bin_expr->right->value);
+            printf("      op: \"%s\"\n    }", bin_expr->op);
         }
 
         // Print a comma if not the last element
@@ -44,7 +35,7 @@ void print_program(Program *program)
             printf(",");
         }
     }
-    printf("] }");
+    printf("\n  ]\n}\n");
 }
 
 #endif // PARSER_UTILS_C

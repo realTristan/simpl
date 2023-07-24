@@ -18,6 +18,14 @@
         "optional": "c",
         "system_error": "c",
         "utils.h": "c",
-        "nodes.h": "c"
+        "nodes.h": "c",
+        "__bit_reference": "c",
+        "__node_handle": "c",
+        "bitset": "c",
+        "__memory": "c",
+        "limits": "c",
+        "ratio": "c",
+        "vector": "c",
+        "chrono": "c"
     }
 }

@@ -27,7 +27,7 @@ bool is_eof(Token **tokens, size_t tokens_size, int index)
 }
 #undef f
 
-#define f new_expr
+#define f new_expr_node
 /**
  * @brief Creates a new expression.
  *
@@ -35,12 +35,64 @@ bool is_eof(Token **tokens, size_t tokens_size, int index)
  * @param token The token.
  * @return Expr*
  */
-Expr *new_expr(NodeType type, Token *token)
+Expr *new_expr_node(NodeType type, Token *token)
 {
     Expr *expr = (Expr *)malloc(sizeof(Expr));
     expr->type = type;
     expr->value = token->value;
     return expr;
+}
+#undef f
+
+#define f new_bin_expr_node
+/**
+ * @brief Creates a new binary expression.
+ *
+ * @param left The left binary expression.
+ * @param right The right expression.
+ * @param op The operator.
+ * @return Expr*
+ */
+BinaryExpr *new_bin_expr_node(BinaryExpr *left, Expr *right, char *op)
+{
+    BinaryExpr *bin_expr = (BinaryExpr *)malloc(sizeof(BinaryExpr));
+    bin_expr->type = NODE_TYPE_BINARY_EXPRESSION;
+    bin_expr->left = left;
+    bin_expr->right = right;
+    bin_expr->op = op;
+    return bin_expr;
+}
+#undef f
+
+#define f new_identifier_node
+/**
+ * @brief Creates a new identifier node.
+ *
+ * @param token The token.
+ * @return Identifier*
+ */
+Identifier *new_identifier_node(Token *token)
+{
+    Identifier *identifier = (Identifier *)malloc(sizeof(Identifier));
+    identifier->type = NODE_TYPE_IDENTIFIER;
+    identifier->value = token->value;
+    return identifier;
+}
+#undef f
+
+#define f new_numeric_literal_node
+/**
+ * @brief Creates a new numeric literal node.
+ *
+ * @param token The token.
+ * @return NumericLiteral*
+ */
+NumericLiteral *new_numeric_literal_node(Token *token)
+{
+    NumericLiteral *numeric_literal = (NumericLiteral *)malloc(sizeof(NumericLiteral));
+    numeric_literal->type = NODE_TYPE_NUMERIC_LITERAL;
+    numeric_literal->value = token->value;
+    return numeric_literal;
 }
 #undef f
 
@@ -59,58 +111,38 @@ Expr *parse_primary_expr(Token **tokens, size_t tokens_size, int *index)
     switch (token->type)
     {
     case TOKEN_TYPE_IDENTIFIER:
-        return new_expr(NODE_TYPE_IDENTIFIER, token);
+        return new_expr_node(NODE_TYPE_IDENTIFIER, token);
     case TOKEN_TYPE_NUMBER:
-        return new_expr(NODE_TYPE_NUMERIC_LITERAL, token);
+        return new_expr_node(NODE_TYPE_NUMERIC_LITERAL, token);
     case TOKEN_TYPE_PLUS:
     case TOKEN_TYPE_MINUS:
     case TOKEN_TYPE_MULTIPLY:
     case TOKEN_TYPE_DIVIDE:
-        return new_expr(NODE_TYPE_BINARY_EXPRESSION, token);
+        return new_expr_node(NODE_TYPE_BINARY_EXPRESSION, token);
     default:
-        printf("Unexpected token: %s\n", token->value);
-        exit(1);
+        NULL;
     }
     return NULL;
 }
 #undef f
 
-#define f new_binary_expr
-/**
- * @brief Creates a new binary expression.
- *
- * @param left The left expression.
- * @param right The right expression.
- * @param op The operator.
- * @return Expr*
- */
-Expr *new_binary_expr(Expr *left, Expr *right, char *op)
-{
-    Expr *expr = (Expr *)malloc(sizeof(Expr));
-    expr->type = NODE_TYPE_BINARY_EXPRESSION;
-    expr->left = left;
-    expr->right = right;
-    expr->op = op;
-    return expr;
-}
-#undef f
-
-#define f parse_multiplicative_expr
+#define f parse_multiplicative_stmt
 /**
  * @brief Parses a multiplicative expression.
  *
  * @param tokens The tokens array.
  * @param tokens_size The amount of tokens.
  * @param index The current index.
- * @return Expr*
+ * @return Stmt*
  */
-Expr *parse_multiplicative_expr(Token **tokens, size_t tokens_size, int *index)
+Stmt *parse_multiplicative_stmt(Token **tokens, size_t tokens_size, int *index)
 {
     // Create a tmp index
     int tmp_index = *index;
 
-    // Parse the left expression
-    Expr *left = parse_primary_expr(tokens, tokens_size, &tmp_index);
+    // Create a new statement
+    Stmt *res = malloc(sizeof(Stmt));
+    res->expr = parse_primary_expr(tokens, tokens_size, &tmp_index);
 
     // Increment the index
     tmp_index++;
@@ -128,7 +160,19 @@ Expr *parse_multiplicative_expr(Token **tokens, size_t tokens_size, int *index)
         Expr *right = parse_primary_expr(tokens, tokens_size, &tmp_index);
 
         // Create a new binary expression
-        left = new_binary_expr(left, right, token->value);
+        if (res->bin_expr != NULL)
+        {
+            res->bin_expr = new_bin_expr_node(
+                res->bin_expr, right, token->value);
+        }
+        else if (res->expr != NULL)
+        {
+            BinaryExpr *tmp = new_bin_expr_node(
+                NULL, res->expr, token->value);
+            res->bin_expr = new_bin_expr_node(
+                tmp, right, token->value);
+            res->expr = NULL;
+        }
 
         // Get the current token
         token = tokens[tmp_index];
@@ -138,26 +182,26 @@ Expr *parse_multiplicative_expr(Token **tokens, size_t tokens_size, int *index)
     *index = tmp_index;
 
     // Return the left expression
-    return left;
+    return res;
 }
 #undef f
 
-#define f parse_additive_expr
+#define f parse_additive_stmt
 /**
  * @brief Parses an additive expression.
  *
  * @param tokens The tokens array.
  * @param tokens_size The amount of tokens.
  * @param index The current index.
- * @return Expr*
+ * @return Stmt*
  */
-Expr *parse_additive_expr(Token **tokens, size_t tokens_size, int *index)
+Stmt *parse_additive_stmt(Token **tokens, size_t tokens_size, int *index)
 {
     // Create a tmp index
     int tmp_index = *index;
 
-    // Parse the left expression
-    Expr *left = parse_multiplicative_expr(tokens, tokens_size, &tmp_index);
+    // Parse the initial statement
+    Stmt *res = parse_multiplicative_stmt(tokens, tokens_size, &tmp_index);
 
     // Get the current token
     Token *token = tokens[tmp_index];
@@ -172,54 +216,74 @@ Expr *parse_additive_expr(Token **tokens, size_t tokens_size, int *index)
         Expr *right = parse_primary_expr(tokens, tokens_size, &tmp_index);
 
         // Create a new binary expression
-        left = new_binary_expr(left, right, token->value);
+        if (res->bin_expr != NULL)
+        {
+            res->bin_expr = new_bin_expr_node(
+                res->bin_expr, right, token->value);
+        }
+        else if (res->expr != NULL)
+        {
+            BinaryExpr *tmp = new_bin_expr_node(
+                NULL, res->expr, token->value);
+            res->bin_expr = new_bin_expr_node(
+                tmp, right, token->value);
+            res->expr = NULL;
+        }
 
         // Get the current token
         token = tokens[tmp_index];
     }
 
     // Set the index to the tmp index
-    *index = tmp_index;
+    *index = tmp_index + 1;
 
-    // Return the left expression
-    return left;
+    // Free opposite expressions
+    if (res->bin_expr != NULL)
+        free(res->expr);
+
+    if (res->expr != NULL)
+        free(res->bin_expr);
+
+    // Return the result statement
+    return res;
 }
 #undef f
 
-#define f parse_expr
+#define f parse_stmt
 /**
- * @brief Parses an expression.
+ * @brief Parses a statement
  *
  * @param tokens The tokens array.
  * @param tokens_size The amount of tokens.
  * @param index The current index.
- * @return Expr*
+ * @return Stmt*
  */
-Expr *parse_expr(Token **tokens, size_t tokens_size, int *index)
+Stmt *parse_stmt(Token **tokens, size_t tokens_size, int *index)
 {
-    return parse_additive_expr(tokens, tokens_size, index);
+    return parse_additive_stmt(tokens, tokens_size, index);
 }
 #undef f
 
-#define f push_back_key
+#define f push_back_stmt
 /**
  * @brief Pushes back a statement to the program body.
  *
  * @param program The program.
- * @param expr The expression.
+ * @param stmt The statement.
+ * @return void
  */
-void push_back_expr(Program *program, Expr *expr)
+void push_back_stmt(Program *program, Stmt *stmt)
 {
     // Create a tmp array
-    Expr **tmp = malloc(sizeof(Expr) * (program->body_size + 1));
+    Stmt **tmp = malloc(sizeof(Stmt) * (program->body_size + 1));
     // Copy the body to the tmp array
-    memcpy(tmp, program->body, sizeof(Expr) * program->body_size);
+    memcpy(tmp, program->body, sizeof(Stmt) * program->body_size);
     // Free the body
     free(program->body);
     // Set the body to the tmp array
     program->body = tmp;
     // Set the body at the current index to the statement
-    program->body[program->body_size] = expr;
+    program->body[program->body_size] = stmt;
     // Increment the body size
     program->body_size++;
 }
@@ -238,17 +302,18 @@ Program *parse_program(Token **tokens, size_t tokens_size)
     // Initialize the program
     Program *program = malloc(sizeof(Program));
     program->type = NODE_TYPE_PROGRAM;
-    program->body = malloc(sizeof(Expr) * tokens_size);
+    program->body = malloc(sizeof(Stmt) * tokens_size);
     program->body_size = 0;
 
     // While not EOF
-    for (int i = 0; !is_eof(tokens, tokens_size, i); i++)
+    int index = 0;
+    while (!is_eof(tokens, tokens_size, index))
     {
         // Parse the statement
-        Expr *expr = parse_expr(tokens, tokens_size, &i);
+        Stmt *stmt = parse_stmt(tokens, tokens_size, &index);
 
         // Pushback the statement to the body
-        push_back_expr(program, expr);
+        push_back_stmt(program, stmt);
     }
 
     printf("Parsed %d statements\n", (int)program->body_size);

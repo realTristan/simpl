@@ -2,7 +2,7 @@
 ![image](https://github.com/realTristan/simpl/assets/75189508/67361db9-f3f6-4e55-ab95-4580addc40fd)
 
 ### Lines of Code
-`371`
+`635`
 
 # Lexer Preview
 <img width="552" alt="Screenshot 2023-07-23 at 9 22 54 AM" src="https://github.com/realTristan/simpl/assets/75189508/551ecc7a-2d97-4a8e-a9d8-2208fdbfb9f1">

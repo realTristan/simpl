@@ -13,7 +13,7 @@
 # Todo
 - [X] Lexer and Tokenizer
 - [X] Node Types
-- [ ] Abstract Syntax Tree
+- [X] Abstract Syntax Tree
 - [ ] Binary Operations
 - [ ] Interpreter
 - [ ] Scope and Environments

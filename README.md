@@ -7,6 +7,9 @@
 # Lexer Preview
 <img width="552" alt="Screenshot 2023-07-23 at 9 22 54 AM" src="https://github.com/realTristan/simpl/assets/75189508/551ecc7a-2d97-4a8e-a9d8-2208fdbfb9f1">
 
+# Parser Preview
+<img width="323" alt="Screenshot 2023-07-24 at 11 08 51 AM" src="https://github.com/realTristan/simpl/assets/75189508/f63d42f6-ade1-4f58-9757-3a7822196269">
+
 # Todo
 - [X] Lexer and Tokenizer
 - [X] Node Types

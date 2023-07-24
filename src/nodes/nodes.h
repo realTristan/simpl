@@ -3,26 +3,19 @@
 
 #include "node_type.h"
 #include <stdlib.h>
-
-/**
- * @brief A numeric literal node.
- *
- */
+/*
 typedef struct NumericLiteral
 {
     NodeType type; // NODE_TYPE_NUMERIC_LITERAL
     char *value;
 } NumericLiteral;
 
-/**
- * @brief An identifier node.
- *
- */
 typedef struct Identifier
 {
     NodeType type; // NODE_TYPE_IDENTIFIER
     char *value;
 } Identifier;
+*/
 
 /**
  * @brief An expression node.
@@ -56,8 +49,8 @@ typedef struct Stmt
 {
     struct Expr *expr;
     struct BinaryExpr *bin_expr;
-    struct NumericLiteral *numeric_literal;
-    struct Identifier *identifier;
+    // struct NumericLiteral *numeric_literal;
+    // struct Identifier *identifier;
 } Stmt;
 
 /**

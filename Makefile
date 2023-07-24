@@ -1,7 +1,9 @@
 all: output execute
 
+files = src/main.c src/utils/utils.c src/lexer/lexer.c src/parser/parser.c src/parser/utils.c
+
 output:
-	gcc src/main.c src/utils/utils.c src/lexer/lexer.c src/parser/parser.c -o build/main
+	gcc $(files) -o build/main
 
 execute:
 	./build/main

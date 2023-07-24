@@ -14,6 +14,10 @@
         "type_traits": "cpp",
         "utility": "cpp",
         "lexer.h": "c",
-        "string.h": "c"
+        "string.h": "c",
+        "optional": "c",
+        "system_error": "c",
+        "utils.h": "c",
+        "nodes.h": "c"
     }
 }

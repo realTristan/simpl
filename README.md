@@ -10,8 +10,8 @@
 # Todo
 - [X] Lexer and Tokenizer
 - [X] Node Types
-- [X] Abstract Syntax Tree
-- [X] Binary Operations
+- [ ] Abstract Syntax Tree
+- [ ] Binary Operations
 - [ ] Interpreter
 - [ ] Scope and Environments
 - [ ] Variables

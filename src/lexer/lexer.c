@@ -16,14 +16,16 @@
  * @param token The token to push.
  * @param tokens_size The amount of tokens.
  */
-Token *push_back_token(Token *tokens, Token token, size_t *tokens_size)
+Token **push_back_token(Token **tokens, Token *token, size_t *tokens_size)
 {
     // Create a new array of tokens with +1 length
-    Token *new_tokens = malloc(sizeof(Token) * (*tokens_size + 1));
+    Token **new_tokens = malloc(sizeof(Token) * (*tokens_size + 1));
     // Copy the old tokens to the new tokens
     for (int i = 0; i < *tokens_size; i++)
     {
-        new_tokens[i] = tokens[i];
+        new_tokens[i] = malloc(sizeof(Token));
+        new_tokens[i]->type = tokens[i]->type;
+        new_tokens[i]->value = tokens[i]->value;
     }
 
     // Add the new token to the end of the new tokens
@@ -40,13 +42,32 @@ Token *push_back_token(Token *tokens, Token token, size_t *tokens_size)
 }
 #undef f
 
+#define f make_token
+/**
+ * @brief Makes a token.
+ *
+ * @param type The token type.
+ * @param value The token value.
+ * @return Token The token.
+ */
+Token *make_token(TokenType type, char *value)
+{
+    // Create the token
+    Token *token = malloc(sizeof(Token));
+    token->type = type;
+    token->value = value;
+
+    // Return the token
+    return token;
+}
+
 /**
  * @brief Tokenizes a string.
  *
  * @param src The string to tokenize.
  * @return const Token* The tokens.
  */
-Token *tokenize(char *src, size_t *tokens_size)
+Token **tokenize(char *src, size_t *tokens_size)
 {
     // Split the src
     size_t split_size = 0;
@@ -56,69 +77,83 @@ Token *tokenize(char *src, size_t *tokens_size)
     char **split_tokens = split_str(src, ' ', &split_size);
 
     // The list of tokens
-    Token *tokens = malloc(sizeof(Token) * split_size);
+    Token **tokens = malloc(sizeof(Token) * split_size);
 
     // Build each token
     while (split_tokens_index < split_size)
     {
         // Pop the token
-        char *token = split_tokens[split_tokens_index];
+        char *token_str = split_tokens[split_tokens_index];
         split_tokens_index++;
 
+        // Token
+        Token *token = malloc(sizeof(Token));
+
         // Check the token type
-        switch (token[0])
+        switch (token_str[0])
         {
         case ' ':
         case '\n':
         case '\t':
             continue;
         case TOKEN_TYPE_LEFT_PAREN_VALUE:
-            tokens = push_back_token(tokens, (Token){TOKEN_TYPE_LEFT_PAREN, "("}, tokens_size);
+            token = make_token(TOKEN_TYPE_LEFT_PAREN, "(");
             break;
-        case ')':
-            tokens = push_back_token(tokens, (Token){TOKEN_TYPE_RIGHT_PAREN, ")"}, tokens_size);
+        case TOKEN_TYPE_RIGHT_PAREN_VALUE:
+            token = make_token(TOKEN_TYPE_RIGHT_PAREN, ")");
             break;
-        case '=':
-            tokens = push_back_token(tokens, (Token){TOKEN_TYPE_EQUAL, "="}, tokens_size);
+        case TOKEN_TYPE_ASSIGN_VALUE:
+            token = make_token(TOKEN_TYPE_ASSIGN, "=");
             break;
-        case '+':
-            tokens = push_back_token(tokens, (Token){TOKEN_TYPE_PLUS, "+"}, tokens_size);
+        case TOKEN_TYPE_PLUS_VALUE:
+            token = make_token(TOKEN_TYPE_PLUS, "+");
             break;
-        case '-':
-            tokens = push_back_token(tokens, (Token){TOKEN_TYPE_MINUS, "-"}, tokens_size);
+        case TOKEN_TYPE_MINUS_VALUE:
+            token = make_token(TOKEN_TYPE_MINUS, "-");
             break;
-        case '*':
-            tokens = push_back_token(tokens, (Token){TOKEN_TYPE_MULTIPLY, "*"}, tokens_size);
+        case TOKEN_TYPE_MULTIPLY_VALUE:
+            token = make_token(TOKEN_TYPE_MULTIPLY, "*");
             break;
-        case '/':
-            tokens = push_back_token(tokens, (Token){TOKEN_TYPE_DIVIDE, "/"}, tokens_size);
+        case TOKEN_TYPE_DIVIDE_VALUE:
+            token = make_token(TOKEN_TYPE_DIVIDE, "/");
+            break;
         default:
-            if (is_int(token))
+            if (is_int(token_str))
             {
-                tokens = push_back_token(tokens, (Token){TOKEN_TYPE_NUMBER, token}, tokens_size);
+                token = make_token(TOKEN_TYPE_NUMBER, token_str);
             }
-            else if (is_alpha(token))
+            else if (is_alpha(token_str))
             {
-                if (strcmp(token, TOKEN_KEYWORD_LET) == 0)
+                if (strcmp(token_str, TOKEN_KEYWORD_LET) == 0)
                 {
-                    tokens = push_back_token(tokens, (Token){TOKEN_TYPE_IDENTIFIER, token}, tokens_size);
+                    token = make_token(TOKEN_TYPE_LET, TOKEN_KEYWORD_LET);
+                }
+                else
+                {
+                    token = make_token(TOKEN_TYPE_IDENTIFIER, token_str);
                 }
             }
             else
             {
-                printf("Unknown token: [%s]\n", token);
+                printf("Unknown token: [%s]\n", token_str);
                 exit(1);
             }
             break;
         }
+
+        // Push back the token
+        tokens = push_back_token(tokens, token, tokens_size);
     }
 
     // Free the split tokens
     free(split_tokens);
 
+    // Pushback the EOF token
+    Token *eof_token = make_token(TOKEN_TYPE_EOF, "EOF");
+    tokens = push_back_token(tokens, eof_token, tokens_size);
+
     // Return the tokens
-    return push_back_token(
-        tokens, (Token){TOKEN_TYPE_EOF, "EOF"}, tokens_size);
+    return tokens;
 }
 
 #endif // LEXER_C

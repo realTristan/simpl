@@ -11,6 +11,6 @@
  * @param token_size The amount of tokens.
  * @return const Token* The tokens.
  */
-Token *tokenize(char *src, size_t *token_size);
+Token **tokenize(char *src, size_t *token_size);
 
 #endif // LEXER_H

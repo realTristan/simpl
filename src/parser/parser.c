@@ -64,13 +64,8 @@ BinaryExpr *new_bin_expr_node(BinaryExpr *left, Expr *right, char *op)
 }
 #undef f
 
+/*
 #define f new_identifier_node
-/**
- * @brief Creates a new identifier node.
- *
- * @param token The token.
- * @return Identifier*
- */
 Identifier *new_identifier_node(Token *token)
 {
     Identifier *identifier = (Identifier *)malloc(sizeof(Identifier));
@@ -81,12 +76,6 @@ Identifier *new_identifier_node(Token *token)
 #undef f
 
 #define f new_numeric_literal_node
-/**
- * @brief Creates a new numeric literal node.
- *
- * @param token The token.
- * @return NumericLiteral*
- */
 NumericLiteral *new_numeric_literal_node(Token *token)
 {
     NumericLiteral *numeric_literal = (NumericLiteral *)malloc(sizeof(NumericLiteral));
@@ -95,6 +84,7 @@ NumericLiteral *new_numeric_literal_node(Token *token)
     return numeric_literal;
 }
 #undef f
+*/
 
 #define f parse_primary_expr
 /**
@@ -227,7 +217,6 @@ Stmt *parse_additive_stmt(Token **tokens, size_t tokens_size, int *index)
                 NULL, res->expr, token->value);
             res->bin_expr = new_bin_expr_node(
                 tmp, right, token->value);
-            res->expr = NULL;
         }
 
         // Get the current token
@@ -239,10 +228,15 @@ Stmt *parse_additive_stmt(Token **tokens, size_t tokens_size, int *index)
 
     // Free opposite expressions
     if (res->bin_expr != NULL)
+    {
         free(res->expr);
-
+        res->expr = NULL;
+    }
     if (res->expr != NULL)
+    {
         free(res->bin_expr);
+        res->bin_expr = NULL;
+    }
 
     // Return the result statement
     return res;

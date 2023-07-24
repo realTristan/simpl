@@ -14,7 +14,8 @@
 - [X] Lexer and Tokenizer
 - [X] Node Types
 - [X] Abstract Syntax Tree
-- [ ] Binary Operations
+- [X] Binary Operations
+- [ ] Paren Binary Operations
 - [ ] Interpreter
 - [ ] Scope and Environments
 - [ ] Variables

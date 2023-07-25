@@ -15,14 +15,14 @@
     {
       "stmt_type": "2",
       "expr": {
-        "value": "simp"
+        "value": "y"
         "type": "4"
       }
     },
     "BinaryExpr" {
       "left": {
         "type": 4
-        "value": "you"
+        "value": "x"
       },
       "right": {
         "type": 3

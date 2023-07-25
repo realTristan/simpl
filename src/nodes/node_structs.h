@@ -21,8 +21,8 @@ typedef struct RegularExpr
  */
 typedef struct BinaryExpr
 {
-    struct BinaryExpr *left;
-    struct RegularExpr *right;
+    struct BinaryExpr *next;
+    struct RegularExpr *current;
     char *op;
 } BinaryExpr;
 

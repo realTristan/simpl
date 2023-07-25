@@ -19,12 +19,12 @@ Stmt *new_expr_stmt(NodeType type, char *value);
 /**
  * @brief Creates a new binary expression node.
  *
- * @param left The left binary expression.
- * @param right The right expression.
+ * @param next The next binary expression.
+ * @param current The current expression.
  * @param op The operator.
  * @return Expr*
  */
-Stmt *new_bin_expr_stmt(BinaryExpr *left, RegularExpr *right, char *op);
+Stmt *new_bin_expr_stmt(BinaryExpr *next, RegularExpr *current, char *op);
 
 /**
  * @brief Set the stmt to binary expr object 

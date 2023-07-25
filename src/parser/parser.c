@@ -74,14 +74,14 @@ Stmt *parse_multiplicative_stmt(Token **tokens, int *index)
         (*index)++;
 
         // Parse the next token
-        Stmt *right = parse_token_stmt(tokens[*index]);
+        Stmt *current = parse_token_stmt(tokens[*index]);
 
         // Set to a binary expression
         if (res->type == NODE_TYPE_REGULAR_EXPRESSION)
             set_stmt_to_binary_expr(res, new_bin_expr_stmt(NULL, res->expr, NULL)->bin_expr);
 
         // Update the binary expression
-        res->bin_expr = new_bin_expr_stmt(res->bin_expr, right->expr, op->value)->bin_expr;
+        res->bin_expr = new_bin_expr_stmt(res->bin_expr, current->expr, op->value)->bin_expr;
     }
 
     // Return the result statement
@@ -115,14 +115,14 @@ Stmt *parse_additive_stmt(Token **tokens, int *index)
         (*index)++;
 
         // Parse the next token
-        Stmt *right = parse_token_stmt(tokens[*index]);
+        Stmt *current = parse_token_stmt(tokens[*index]);
 
         // Set to a binary expression
         if (res->type == NODE_TYPE_REGULAR_EXPRESSION)
             set_stmt_to_binary_expr(res, new_bin_expr_stmt(NULL, res->expr, NULL)->bin_expr);
 
         // Update the binary expression
-        res->bin_expr = new_bin_expr_stmt(res->bin_expr, right->expr, op->value)->bin_expr;
+        res->bin_expr = new_bin_expr_stmt(res->bin_expr, current->expr, op->value)->bin_expr;
 
         // Increment the index to go back to the middle token
         (*index)++;

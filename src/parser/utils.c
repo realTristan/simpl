@@ -48,20 +48,21 @@ void print_bin_expr(BinaryExpr *bin_expr, int lPadding)
 {
     char* padding = build_padding(lPadding);
     printf("%sBinaryExpr {\n", padding);
-    // While there is a left binary expression, print it
-    while (bin_expr->left)
+    // While there is a next binary expression, print it
+    while (bin_expr->next)
     {
-        printf("%s  left: {\n", padding);
-        printf("%s    type: %d\n", padding, bin_expr->left->right->type);
-        printf("%s    value: \"%s\"\n", padding, bin_expr->left->right->value);
-        printf("%s  }\n", padding);
-        printf("%s  op: \"%s\"\n", padding, bin_expr->op);
-        printf("%s  right: {\n", padding);
-        printf("%s    type: %d\n", padding, bin_expr->right->type);
-        printf("%s    value: \"%s\"\n", padding, bin_expr->right->value);
-        printf("%s  }\n", padding);
-        printf("%s}\n", padding);
-        bin_expr = bin_expr->left;
+        printf("%s  {\n", padding);
+        printf("%s    next: {\n", padding);
+        printf("%s      type: %d\n", padding, bin_expr->next->current->type);
+        printf("%s      value: \"%s\"\n", padding, bin_expr->next->current->value);
+        printf("%s    },\n", padding);
+        printf("%s    op: \"%s\"\n", padding, bin_expr->op);
+        printf("%s    current: {\n", padding);
+        printf("%s      type: %d\n", padding, bin_expr->current->type);
+        printf("%s      value: \"%s\"\n", padding, bin_expr->current->value);
+        printf("%s    }\n", padding);
+        printf("%s  },\n", padding);
+        bin_expr = bin_expr->next;
     }
 }
 
@@ -80,8 +81,8 @@ void print_program(Program *program)
         Stmt *stmt = program->body[i];
         if (stmt->type == NODE_TYPE_REGULAR_EXPRESSION)
         {
-            printf("    {\n      stmt_type: \"%d\"", stmt->type);
-            printf(",\n      expr: {\n        value: \"%s\"\n        type: \"%d\"\n      }\n    },\n", stmt->expr->value, stmt->expr->type);
+            printf("    {\n      stmt_type: %d", stmt->type);
+            printf(",\n      expr: {\n        value: \"%s\"\n        type: %d\n      }\n    },\n", stmt->expr->value, stmt->expr->type);
         }
         else if (stmt->type == NODE_TYPE_BINARY_EXPRESSION)
         {

@@ -75,8 +75,8 @@ void print_program(Program *program)
         Stmt *stmt = program->body[i];
         if (stmt->type == NODE_TYPE_REGULAR_EXPRESSION)
         {
-            printf("    {\n      type: \"%d\"", stmt->type);
-            printf(",\n      expr: {\n        value: \"%s\"\n      }\n    },\n", stmt->expr->value);
+            printf("    {\n      stmt_type: \"%d\"", stmt->type);
+            printf(",\n      expr: {\n        value: \"%s\"\n        type: \"%d\"\n      }\n    },\n", stmt->expr->value, stmt->expr->type);
         }
         else if (stmt->type == NODE_TYPE_BINARY_EXPRESSION)
         {
@@ -84,7 +84,7 @@ void print_program(Program *program)
             continue;
         }
     }
-    printf("\n  ]\n}\n");
+    printf("  ]\n}\n");
 }
 
 #endif // PARSER_UTILS_C

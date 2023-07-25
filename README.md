@@ -10,25 +10,25 @@
 # Parser Preview
 ```json
 {
-  type: "0",
-  body: [
+  "type": "0",
+  "body": [
     {
-      stmt_type: "2",
-      expr: {
-        value: "simp"
-        type: "4"
+      "stmt_type": "2",
+      "expr": {
+        "value": "simp"
+        "type": "4"
       }
     },
-    BinaryExpr {
-      left: {
-        type: 4
-        value: "you"
-      }
-      right: {
-        type: 3
-        value: "10"
-      }
-      op: "*"
+    "BinaryExpr" {
+      "left": {
+        "type": 4
+        "value": "you"
+      },
+      "right": {
+        "type": 3
+        "value": "10"
+      },
+      "op": "*"
     }
   ]
 }

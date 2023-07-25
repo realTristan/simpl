@@ -48,16 +48,21 @@ void print_bin_expr(BinaryExpr *bin_expr, int lPadding)
 {
     char* padding = build_padding(lPadding);
     printf("%sBinaryExpr {\n", padding);
-    printf("%s  left: {\n", padding);
-    printf("%s    type: %d\n", padding, bin_expr->left->right->type);
-    printf("%s    value: \"%s\"\n", padding, bin_expr->left->right->value);
-    printf("%s  }\n", padding);
-    printf("%s  right: {\n", padding);
-    printf("%s    type: %d\n", padding, bin_expr->right->type);
-    printf("%s    value: \"%s\"\n", padding, bin_expr->right->value);
-    printf("%s  }\n", padding);
-    printf("%s  op: \"%s\"\n", padding, bin_expr->op);
-    printf("%s}\n", padding);
+    // While there is a left binary expression, print it
+    while (bin_expr->left)
+    {
+        printf("%s  left: {\n", padding);
+        printf("%s    type: %d\n", padding, bin_expr->left->right->type);
+        printf("%s    value: \"%s\"\n", padding, bin_expr->left->right->value);
+        printf("%s  }\n", padding);
+        printf("%s  op: \"%s\"\n", padding, bin_expr->op);
+        printf("%s  right: {\n", padding);
+        printf("%s    type: %d\n", padding, bin_expr->right->type);
+        printf("%s    value: \"%s\"\n", padding, bin_expr->right->value);
+        printf("%s  }\n", padding);
+        printf("%s}\n", padding);
+        bin_expr = bin_expr->left;
+    }
 }
 
 /**

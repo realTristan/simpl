@@ -11,7 +11,7 @@ int main(void)
 {
     // The source code
     // char *src = "let x = 45 * ( 10 - 2 )";
-    char *src = "simp = you * 10";
+    char *src = "x * 10 + 2";
 
     // Tokenize the source
     size_t tokens_size = 0;

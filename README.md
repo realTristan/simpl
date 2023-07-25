@@ -8,7 +8,7 @@
 <img width="552" alt="Screenshot 2023-07-23 at 9 22 54 AM" src="https://github.com/realTristan/simpl/assets/75189508/551ecc7a-2d97-4a8e-a9d8-2208fdbfb9f1">
 
 # Parser Preview
-```C
+```json
 {
   type: "0",
   body: [

@@ -53,7 +53,7 @@ void set_stmt_to_binary_expr(Stmt *stmt, BinaryExpr *bin_expr)
 {
     stmt->type = NODE_TYPE_BINARY_EXPRESSION;
     stmt->bin_expr = bin_expr;
-    free(stmt->expr);
+    // free(stmt->expr);
     stmt->expr = NULL;
 }
 
@@ -67,7 +67,7 @@ void set_stmt_to_expr(Stmt *stmt, RegularExpr *expr)
 {
     stmt->type = NODE_TYPE_REGULAR_EXPRESSION;
     stmt->expr = expr;
-    free(stmt->bin_expr);
+    // free(stmt->bin_expr);
     stmt->bin_expr = NULL;
 }
 

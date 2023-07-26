@@ -270,7 +270,7 @@ Program *parse_program(Token **tokens, size_t tokens_size)
 void parser(Token **tokens, size_t tokens_size)
 {
     Program *program = parse_program(tokens, tokens_size);
-    print_program(program);
+    print_program(program); // Find a way to fix this...
 }
 
 #endif // PARSER_C

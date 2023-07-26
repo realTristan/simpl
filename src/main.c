@@ -22,7 +22,7 @@ int main(void)
 {
     // The source code
     // char *src = "let x = 45 * ( 10 - 2 )";
-    char *src = "( 10 + 2 ) - 1";
+    char *src = "( 10 + 2 ) - ( 1 + 4 )";
 
     // Tokenize the source
     size_t tokens_size = 0;

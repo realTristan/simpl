@@ -13,6 +13,7 @@
  */
 typedef enum TokenType
 {
+    TOKEN_TYPE_NULL,
     TOKEN_TYPE_LET,
     TOKEN_TYPE_NUMBER,
     TOKEN_TYPE_PLUS,
@@ -82,6 +83,8 @@ typedef struct Token
 //   The value of each token type   //
 //////////////////////////////////////
 
+#define TOKEN_TYPE_NULL_VALUE "null"
+#define TOKEN_TYPE_LET_VALUE "let"
 #define TOKEN_TYPE_PLUS_VALUE '+'
 #define TOKEN_TYPE_MINUS_VALUE '-'
 #define TOKEN_TYPE_MULTIPLY_VALUE '*'
@@ -125,11 +128,5 @@ typedef struct Token
 #define TOKEN_TYPE_COMMENT_VALUE '//'
 #define TOKEN_TYPE_NEWLINE_VALUE '\n'
 #define TOKEN_TYPE_WHITESPACE_VALUE ' '
-
-//////////////////
-//   Keywords   //
-//////////////////
-
-#define TOKEN_KEYWORD_LET "let"
 
 #endif // TOKEN_H

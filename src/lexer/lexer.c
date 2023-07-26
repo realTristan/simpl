@@ -124,9 +124,13 @@ Token **tokenize(char *src, size_t *tokens_size)
             }
             else if (is_alpha(token_str))
             {
-                if (strcmp(token_str, TOKEN_KEYWORD_LET) == 0)
+                if (strcmp(token_str, TOKEN_TYPE_LET_VALUE) == 0)
                 {
-                    token = make_token(TOKEN_TYPE_LET, TOKEN_KEYWORD_LET);
+                    token = make_token(TOKEN_TYPE_LET, TOKEN_TYPE_LET_VALUE);
+                }
+                else if (strcmp(token_str, TOKEN_TYPE_NULL_VALUE) == 0)
+                {
+                    token = make_token(TOKEN_TYPE_NULL, TOKEN_TYPE_NULL_VALUE);
                 }
                 else
                 {

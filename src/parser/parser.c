@@ -32,6 +32,10 @@ Stmt *parse_token_stmt(Token *token)
         return new_expr_stmt(NODE_TYPE_IDENTIFIER, token->value);
     case TOKEN_TYPE_NUMBER:
         return new_expr_stmt(NODE_TYPE_NUMERIC_LITERAL, token->value);
+
+    // NULL Literal
+    case TOKEN_TYPE_NULL:
+        return new_expr_stmt(NODE_TYPE_NULL_LITERAL, token->value);
     
     // These return a NODE_TYPE_BINARY_EXPRESSION Statement
     case TOKEN_TYPE_PLUS:

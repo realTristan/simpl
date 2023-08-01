@@ -15,30 +15,40 @@
  * @param tokens The token array.
  * @param token The token to push.
  * @param tokens_size The amount of tokens.
+ * @return void
  */
-Token **push_back_token(Token **tokens, Token *token, size_t *tokens_size)
+// Token **push_back_token(Token **tokens, Token *token, size_t *tokens_size)
+void push_back_token(Token **tokens, Token *token, size_t *tokens_size)
 {
-    // Create a new array of tokens with +1 length
-    Token **new_tokens = malloc(sizeof(Token) * (*tokens_size + 1));
-    // Copy the old tokens to the new tokens
-    for (int i = 0; i < *tokens_size; i++)
-    {
-        new_tokens[i] = malloc(sizeof(Token));
-        new_tokens[i]->type = tokens[i]->type;
-        new_tokens[i]->value = tokens[i]->value;
-    }
+    /*
+        // Create a new array of tokens with +1 length
+        Token **new_tokens = malloc(sizeof(Token) * (*tokens_size + 1));
+        // Copy the old tokens to the new tokens
+        for (int i = 0; i < *tokens_size; i++)
+        {
+            new_tokens[i] = malloc(sizeof(Token));
+            new_tokens[i]->type = tokens[i]->type;
+            new_tokens[i]->value = tokens[i]->value;
+        }
+
+        // Add the new token to the end of the new tokens
+        new_tokens[*tokens_size] = token;
+
+        // Update the token size
+        *tokens_size += 1;
+
+        // Free the old tokens
+        free(tokens);
+
+        // return the new tokens
+        return new_tokens;
+    */
 
     // Add the new token to the end of the new tokens
-    new_tokens[*tokens_size] = token;
+    tokens[*tokens_size] = token;
 
     // Update the token size
-    *tokens_size += 1;
-
-    // Free the old tokens
-    free(tokens);
-
-    // Return the new tokens
-    return new_tokens;
+    (*tokens_size)++;
 }
 #undef f
 
@@ -146,7 +156,8 @@ Token **tokenize(char *src, size_t *tokens_size)
         }
 
         // Push back the token
-        tokens = push_back_token(tokens, token, tokens_size);
+        // tokens = push_back_token(tokens, token, tokens_size);
+        push_back_token(tokens, token, tokens_size);
     }
 
     // Free the split tokens
@@ -154,7 +165,9 @@ Token **tokenize(char *src, size_t *tokens_size)
 
     // Pushback the EOF token
     Token *eof_token = make_token(TOKEN_TYPE_EOF, "EOF");
-    tokens = push_back_token(tokens, eof_token, tokens_size);
+    
+    // tokens = push_back_token(tokens, eof_token, tokens_size);
+    push_back_token(tokens, eof_token, tokens_size);
 
     // Return the tokens
     return tokens;

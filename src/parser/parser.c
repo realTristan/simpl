@@ -71,7 +71,7 @@ Stmt *parse_token_stmt(Token **tokens, int *index)
     // NULL Literal
     case TOKEN_TYPE_NULL:
         return new_expr_stmt(NODE_TYPE_NULL_LITERAL, token->value);
-    
+
     // These return a NODE_TYPE_BINARY_EXPRESSION Statement
     case TOKEN_TYPE_PLUS:
     case TOKEN_TYPE_MINUS:
@@ -204,22 +204,26 @@ Stmt *parse_stmt(Token **tokens, int *index)
  */
 void push_back_stmt(Program *program, Stmt *stmt)
 {
-    // Create a tmp array
-    Stmt **tmp = malloc(sizeof(Stmt) * (program->body_size + 1));
+    /*
+        // Create a tmp array
+        Stmt **tmp = malloc(sizeof(Stmt) * (program->body_size + 1));
 
-    // Copy the body to the tmp array
-    memcpy(tmp, program->body, sizeof(Stmt) * program->body_size);
+        // Copy the body to the tmp array
+        memcpy(tmp, program->body, sizeof(Stmt) * program->body_size);
 
-    // Free the body
-    free(program->body);
+        // Free the body
+        free(program->body);
 
-    // Set the body to the tmp array
-    program->body = tmp;
+        // Set the body to the tmp array
+        program->body = tmp;
 
-    // Set the body at the current index to the statement
+        // Set the body at the current index to the statement
+        program->body[program->body_size] = stmt;
+
+        // Increment the body size
+        program->body_size++;
+    */
     program->body[program->body_size] = stmt;
-
-    // Increment the body size
     program->body_size++;
 }
 #undef f

@@ -22,7 +22,8 @@ int main(void)
 {
     // The source code
     // char *src = "let x = 45 * ( 10 - 2 )";
-    char *src = "x + 5 + 2";
+    char *src = "x + ( 5 + 2 )";
+    // Segmentation fault from above is caused by the print function
 
     // Tokenize the source
     size_t tokens_size = 0;

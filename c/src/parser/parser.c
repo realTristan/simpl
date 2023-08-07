@@ -81,8 +81,10 @@ stmt_t parse_token_stmt(token_array_t *token_array, int *parsing_index)
     case TOKEN_TYPE_MINUS:
     case TOKEN_TYPE_MULTIPLY:
     case TOKEN_TYPE_DIVIDE:
+    {
         reg_expr_t right = new_expr_stmt(NODE_TYPE_NUMERIC_LITERAL, "0").expr;
         return new_bin_expr_stmt(NULL, &right, token.value);
+    }
 
     // If there's an open paranthesis, parse the expression inside
     case TOKEN_TYPE_LEFT_PAREN:
@@ -166,7 +168,7 @@ stmt_t parse_additive_stmt(token_array_t *token_array, int *parsing_index)
         // Parse the left token
         stmt_t right = parse_token_stmt(token_array, parsing_index);
 
-         // Set to a binary expression
+        // Set to a binary expression
         if (res.type == NODE_TYPE_REGULAR_EXPRESSION)
         {
             bin_expr_t bin_expr = new_bin_expr_stmt(NULL, &res.expr, NULL).bin_expr;

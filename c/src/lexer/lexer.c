@@ -85,15 +85,12 @@ void tokenize(token_array_t *tokens, char *src)
             }
             break;
         }
-
-        // Free the token
-        free(token_str);
     }
 
     // Free the split tokens
-    free_split_array(split_tokens);
+    // free_split_array(split_tokens);
 
-    // tokens = push_back_token(tokens, eof_token, tokens_size);
+    // Push back the final EOF token.
     push_back_token(tokens, new_token(TOKEN_TYPE_EOF, "EOF"));
 }
 

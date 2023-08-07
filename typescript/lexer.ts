@@ -1,4 +1,4 @@
-import { isNumber, isString } from "./utils";
+import { isNumber, isString } from "./utils.ts";
 
 /**
  * A token type
@@ -94,9 +94,3 @@ export const tokenize = (src: string): Token[] => {
   // Return the array of tokens
   return tokens;
 };
-
-// Run the lexer
-const tokens = tokenize("let x = 5 + 5");
-console.log(tokens);
-
-// deno run lexer.ts

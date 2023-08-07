@@ -1,9 +1,4 @@
-/**
- * Simpl_TS is a basic programming langauge written in typescript.
- * It uses the same logic as my simpl language written in C.
- * I got stuck and decided to use a more OOP language to help me
- * understand the concepts better.
- */
+import { isNumber, isString } from "./utils.ts";
 
 /**
  * A token type
@@ -18,7 +13,10 @@ export enum TokenType {
   Let,
 }
 
-const Keywords: { [key: string]: TokenType } = {
+/**
+ * A map of reserved keywords
+ */
+const KEYWORDS: { [key: string]: TokenType } = {
   let: TokenType.Let,
 };
 
@@ -29,36 +27,6 @@ export interface Token {
   value: string;
   type: TokenType;
 }
-
-/**
- * Check if the value is a number
- *
- * @param value The value to check
- * @returns True if the value is a number, false otherwise
- * @example
- * isNumber("5");
- * // => true
- * isNumber("hello");
- * // => false
- */
-const isNumber = (value: string): boolean => {
-  return value.match(/[0-9]/i) ? true : false;
-};
-
-/**
- * Check if the value is a string
- *
- * @param value The value to check
- * @returns True if the value is a string, false otherwise
- * @example
- * isString("hello");
- * // => true
- * isString("5");
- * // => false
- */
-const isString = (value: string): boolean => {
-  return value.match(/[a-z]/i) ? true : false;
-};
 
 /**
  * Tokenize the source code
@@ -107,8 +75,8 @@ export const tokenize = (src: string): Token[] => {
         // Check if the value is a string
         if (isString(value)) {
           // Check for reserved keywords
-          if (Keywords[value.toLowerCase()])
-            tokens.push({ value: value, type: Keywords[value.toLowerCase()] });
+          if (KEYWORDS[value.toLowerCase()])
+            tokens.push({ value: value, type: KEYWORDS[value.toLowerCase()] });
           else tokens.push({ value: value, type: TokenType.Identifier });
         }
 
@@ -126,9 +94,3 @@ export const tokenize = (src: string): Token[] => {
   // Return the array of tokens
   return tokens;
 };
-
-// Run the lexer
-const tokens = tokenize("let x = 5 + 5");
-console.log(tokens);
-
-// deno run lexer.ts

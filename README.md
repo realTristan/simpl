@@ -12,7 +12,7 @@
 - [X] Node Types
 - [X] Abstract Syntax Tree
 - [X] Binary Operations
-- [ ] Paren Binary Operations
+- [X] Paren Binary Operations
 - [ ] Interpreter
 - [ ] Scope and Environments
 - [ ] Variables

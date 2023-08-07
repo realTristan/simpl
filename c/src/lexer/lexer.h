@@ -1,16 +1,17 @@
 #ifndef LEXER_H
 #define LEXER_H
 
-#include "token.h"
+#include "../tokens/token.h"
+#include "../tokens/token_array.h"
 #include <stdlib.h>
 
 /**
  * @brief Tokenizes a string.
  *
+ * @param tokens The tokens array.
  * @param src The string to tokenize.
- * @param token_size The amount of tokens.
- * @return const Token* The tokens.
+ * @return void
  */
-Token **tokenize(char *src, size_t *token_size);
+void tokenize(token_array_t *tokens, char *src);
 
 #endif // LEXER_H

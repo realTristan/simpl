@@ -28,6 +28,13 @@
         "vector": "c",
         "chrono": "c",
         "node_structs.h": "c",
-        "node_type.h": "c"
+        "node_type.h": "c",
+        "unordered_map": "c",
+        "__hash_table": "c",
+        "__split_buffer": "c",
+        "initializer_list": "c",
+        "variant": "c",
+        "node_types.h": "c",
+        "print.h": "c"
     }
 }

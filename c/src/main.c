@@ -6,6 +6,7 @@
 
 #include "lexer/lexer.h"
 #include "parser/parser.h"
+#include "tokens/token_array.h"
 
 /** Notes
  * 
@@ -25,18 +26,17 @@ int main(void)
     char *src = "x + ( 5 + 2 )";
     // Segmentation fault from above is caused by the print function
 
+    // Create a new token array
+    token_array_t *token_array = new_token_array();
+
     // Tokenize the source
-    size_t tokens_size = 0;
-    Token **tokens = tokenize(src, &tokens_size);
+    tokenize(token_array, src);
 
     // Print the tokens
-    for (int i = 0; i < tokens_size; i++)
-    {
-        printf("Token (%d): [%s]\n", tokens[i]->type, tokens[i]->value);
-    }
+    print_token_array(token_array);
 
     // Parse the tokens
-    parser(tokens, tokens_size);
+    parser(token_array);
 }
 
 #endif // MAIN

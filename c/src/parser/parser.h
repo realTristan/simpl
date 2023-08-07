@@ -7,9 +7,8 @@
 /**
  * @brief Parses tokens.
  *
- * @param tokens The tokens array.
- * @param tokens_size The amount of tokens.
+ * @param token_array The tokens array.
  */
-void parser(Token **tokens, size_t tokens_size);
+void parser(token_array_t *token_array);
 
 #endif // PARSER_H

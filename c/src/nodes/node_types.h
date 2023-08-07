@@ -1,6 +1,8 @@
 #ifndef NODE_TYPE_H
 #define NODE_TYPE_H
 
+#include <stdlib.h>
+
 /**
  * @brief The type of a node.
  *
@@ -9,7 +11,7 @@
  * This is useful for determining how to handle a node.
  *
  */
-typedef enum NodeType
+typedef enum node_type
 {
     // Currently in use
     NODE_TYPE_PROGRAM,
@@ -65,6 +67,66 @@ typedef enum NodeType
     NODE_TYPE_ARRAY_SLICE_TO,
     NODE_TYPE_ARRAY_SLICE_RANGE,
     NODE_TYPE_ARRAY_SPLICE,
-} NodeType;
+    NODE_TYPE_UNKNOWN,
+} node_type;
+
+// Forward declarations
+struct bin_expr_t;
+struct reg_expr_t;
+struct stmt_t;
+struct program_t;
+
+/**
+ * @brief An expression node.
+ *
+ */
+typedef struct reg_expr_t
+{
+    node_type type; // SO FAR ONLY: NODE_TYPE_NUMERIC_LITERAL || NODE_TYPE_IDENTIFIER
+    char *value;
+} reg_expr_t;
+
+/**
+ * @brief A binary expression node.
+ * @type NODE_TYPE_BINARY_EXPRESSION
+ *
+ */
+typedef struct bin_expr_t
+{
+    struct bin_expr_t *left;
+    struct reg_expr_t *right;
+    char *op;
+} bin_expr_t;
+
+/**
+ * @brief A statement node.
+ *
+ */
+typedef struct stmt_t
+{
+    node_type type; // NODE_TYPE_BINARY_EXPRESSION || NODE_TYPE_REGULAR_EXPRESSION
+    struct reg_expr_t expr;
+    struct bin_expr_t bin_expr;
+} stmt_t;
+
+/**
+ * @brief Statement Array
+*/
+typedef struct stmt_array_t
+{
+    stmt_t *values;
+    size_t size;
+} stmt_array_t;
+
+/**
+ * @brief A program node.
+ * @type NODE_TYPE_PROGRAM
+ *
+ */
+typedef struct program_t
+{
+    node_type type; // NODE_TYPE_PROGRAM
+    stmt_array_t body;
+} program_t;
 
 #endif // NODE_TYPE_H

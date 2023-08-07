@@ -11,7 +11,7 @@
  * TOKEN_TYPE_PLUS, then the value of the token is the string "+".
  *
  */
-typedef enum TokenType
+typedef enum token_type
 {
     TOKEN_TYPE_NULL,
     TOKEN_TYPE_LET,
@@ -65,7 +65,7 @@ typedef enum TokenType
     TOKEN_TYPE_WHITESPACE,
     TOKEN_TYPE_UNKNOWN,
     TOKEN_TYPE_EOF
-} TokenType;
+} token_type;
 
 /**
  * @brief A token is a pair of a token type and a value.
@@ -73,11 +73,21 @@ typedef enum TokenType
  * @param type The type of the token.
  * @param value The value of the token.
  */
-typedef struct Token
+typedef struct token_t
 {
-    TokenType type;
+    token_type type;
     char *value;
-} Token;
+} token_t;
+
+/**
+ * @brief Makes a token.
+ *
+ * @param type The token type.
+ * @param value The token value.
+ * @return token_t The token.
+ */
+token_t new_token(token_type type, char *value);
+
 
 //////////////////////////////////////
 //   The value of each token type   //

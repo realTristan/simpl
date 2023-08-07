@@ -27,9 +27,6 @@ void tokenize(token_array_t *tokens, char *src)
         // Pop the token
         char *token_str = split_tokens.values[i];
 
-        // Token
-        token_t token;
-
         // Check the token type
         switch (token_str[0])
         {

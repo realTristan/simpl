@@ -17,7 +17,7 @@
 #define NULL ((void *)0)
 
 // Function declarations
-stmt_t parse_stmt(token_array_t *token_array, int *parsing_index);
+stmt_t *parse_stmt(token_array_t *token_array, int *parsing_index);
 
 #define f parse_token_stmt_handle_paren
 /**
@@ -27,13 +27,13 @@ stmt_t parse_stmt(token_array_t *token_array, int *parsing_index);
  * @param parsing_index The parsing index.
  * @return stmt_t
  */
-stmt_t parse_token_stmt_handle_paren(token_array_t *token_array, int *parsing_index)
+stmt_t *parse_token_stmt_handle_paren(token_array_t *token_array, int *parsing_index)
 {
     // Increment the index
     (*parsing_index)++;
 
     // Parse the expression
-    stmt_t stmt = parse_stmt(token_array, parsing_index);
+    stmt_t *stmt = parse_stmt(token_array, parsing_index);
 
     // If the right token is not a right paranthesis, throw an error
     if (token_array->tokens[*parsing_index].type != TOKEN_TYPE_RIGHT_PAREN)
@@ -55,7 +55,7 @@ stmt_t parse_token_stmt_handle_paren(token_array_t *token_array, int *parsing_in
  * @param parsing_index The parsing index.
  * @return stmt_t
  */
-stmt_t parse_token_stmt(token_array_t *token_array, int *parsing_index)
+stmt_t *parse_token_stmt(token_array_t *token_array, int *parsing_index)
 {
     // Get the right token
     token_t token = token_array->tokens[*parsing_index];
@@ -68,13 +68,13 @@ stmt_t parse_token_stmt(token_array_t *token_array, int *parsing_index)
     case TOKEN_TYPE_IDENTIFIER:
         // The provided type gets set to the stmt->expr->type
         // This will be used when walking the AST
-        return new_expr_stmt(NODE_TYPE_IDENTIFIER, token.value);
+        return new_reg_expr_stmt(NODE_TYPE_IDENTIFIER, token.value);
     case TOKEN_TYPE_NUMBER:
-        return new_expr_stmt(NODE_TYPE_NUMERIC_LITERAL, token.value);
+        return new_reg_expr_stmt(NODE_TYPE_NUMERIC_LITERAL, token.value);
 
     // NULL Literal
     case TOKEN_TYPE_NULL:
-        return new_expr_stmt(NODE_TYPE_NULL_LITERAL, token.value);
+        return new_reg_expr_stmt(NODE_TYPE_NULL_LITERAL, token.value);
 
     // These return a NODE_TYPE_BINARY_EXPRESSION Statement
     case TOKEN_TYPE_PLUS:
@@ -82,15 +82,15 @@ stmt_t parse_token_stmt(token_array_t *token_array, int *parsing_index)
     case TOKEN_TYPE_MULTIPLY:
     case TOKEN_TYPE_DIVIDE:
     {
-        reg_expr_t right = new_expr_stmt(NODE_TYPE_NUMERIC_LITERAL, "0").expr;
-        return new_bin_expr_stmt(NULL, &right, token.value);
+        reg_expr_t *right = new_reg_expr(NODE_TYPE_NUMERIC_LITERAL, "0");
+        return new_bin_expr_stmt(NULL, right, token.value);
     }
 
     // If there's an open paranthesis, parse the expression inside
     case TOKEN_TYPE_LEFT_PAREN:
         return parse_token_stmt_handle_paren(token_array, parsing_index);
     default:
-        return new_expr_stmt(NODE_TYPE_UNKNOWN, NULL);
+        return new_reg_expr_stmt(NODE_TYPE_UNKNOWN, NULL);
     }
 }
 #undef f
@@ -103,10 +103,10 @@ stmt_t parse_token_stmt(token_array_t *token_array, int *parsing_index)
  * @param parsing_index The parsing index.
  * @return stmt_t
  */
-stmt_t parse_multiplicative_stmt(token_array_t *token_array, int *parsing_index)
+stmt_t *parse_multiplicative_stmt(token_array_t *token_array, int *parsing_index)
 {
     // Get the first token
-    stmt_t res = parse_token_stmt(token_array, parsing_index);
+    stmt_t *res = parse_token_stmt(token_array, parsing_index);
 
     // While (true)
     for (;;)
@@ -123,17 +123,17 @@ stmt_t parse_multiplicative_stmt(token_array_t *token_array, int *parsing_index)
         (*parsing_index)++;
 
         // Parse the left token
-        stmt_t right = parse_token_stmt(token_array, parsing_index);
+        stmt_t *right = parse_token_stmt(token_array, parsing_index);
 
         // Set to a binary expression
-        if (res.type == NODE_TYPE_REGULAR_EXPRESSION)
+        if (res->type == NODE_TYPE_REGULAR_EXPRESSION)
         {
-            bin_expr_t bin_expr = new_bin_expr_stmt(NULL, &res.expr, NULL).bin_expr;
-            set_stmt_to_bin_expr(&res, bin_expr);
+            bin_expr_t *bin_expr = new_bin_expr(NULL, res->reg_expr, NULL);
+            set_stmt_to_bin_expr(res, bin_expr);
         }
 
         // Update the binary expression
-        res.bin_expr = new_bin_expr_stmt(&res.bin_expr, &right.expr, op.value).bin_expr;
+        res->bin_expr = new_bin_expr(res->bin_expr, right->reg_expr, op.value);
     }
 
     // Return the result statement
@@ -149,10 +149,10 @@ stmt_t parse_multiplicative_stmt(token_array_t *token_array, int *parsing_index)
  * @param parsing_index The parsing index.
  * @return stmt_t
  */
-stmt_t parse_additive_stmt(token_array_t *token_array, int *parsing_index)
+stmt_t *parse_additive_stmt(token_array_t *token_array, int *parsing_index)
 {
     // Get the first token
-    stmt_t res = parse_multiplicative_stmt(token_array, parsing_index);
+    stmt_t *res = parse_multiplicative_stmt(token_array, parsing_index);
 
     // While (true)
     for (;;)
@@ -166,25 +166,27 @@ stmt_t parse_additive_stmt(token_array_t *token_array, int *parsing_index)
         (*parsing_index)++;
 
         // Parse the left token
-        stmt_t right = parse_token_stmt(token_array, parsing_index);
+        stmt_t *right = parse_token_stmt(token_array, parsing_index);
 
         // Set to a binary expression
-        if (res.type == NODE_TYPE_REGULAR_EXPRESSION)
+        if (res->type == NODE_TYPE_REGULAR_EXPRESSION)
         {
-            bin_expr_t bin_expr = new_bin_expr_stmt(NULL, &res.expr, NULL).bin_expr;
-            set_stmt_to_bin_expr(&res, bin_expr);
+            bin_expr_t *bin_expr = new_bin_expr(NULL, res->reg_expr, NULL);
+            set_stmt_to_bin_expr(res, bin_expr);
         }
 
         // Update the binary expression
-        res.bin_expr = new_bin_expr_stmt(&res.bin_expr, &right.expr, op.value).bin_expr;
+        res->bin_expr = new_bin_expr(res->bin_expr, right->reg_expr, op.value);
 
         // Increment the index to go back to the middle token
         (*parsing_index)++;
     }
 
-    // Free opposite expressions
-    // free_stmt_unused_mem(res);
+    // Print the resulting binary expression
+    // printf("Resulting binary expression: ");
+    // printf("\n%s %s %s\n", res->bin_expr->left->right->value, res->bin_expr->op, res->bin_expr->right->value);
 
+    
     // Return the result statement
     return res;
 }
@@ -198,7 +200,7 @@ stmt_t parse_additive_stmt(token_array_t *token_array, int *parsing_index)
  * @param parsing_index The parsing index.
  * @return stmt_t
  */
-stmt_t parse_stmt(token_array_t *token_array, int *parsing_index)
+stmt_t *parse_stmt(token_array_t *token_array, int *parsing_index)
 {
     return parse_additive_stmt(token_array, parsing_index);
 }
@@ -212,7 +214,7 @@ stmt_t parse_stmt(token_array_t *token_array, int *parsing_index)
  * @param stmt The statement.
  * @return void
  */
-void push_back_stmt(program_t *program, stmt_t stmt)
+void push_back_stmt(program_t *program, stmt_t *stmt)
 {
     program->body.values[program->body.size] = stmt;
     program->body.size++;
@@ -235,7 +237,7 @@ program_t *parse_program(token_array_t *token_array)
     for (int i = 0; i < token_array->size; i++)
     {
         // Parse the statement
-        stmt_t stmt = parse_stmt(token_array, &i);
+        stmt_t *stmt = parse_stmt(token_array, &i);
 
         // Pushback the statement to the body
         push_back_stmt(program, stmt);
@@ -252,7 +254,7 @@ program_t *parse_program(token_array_t *token_array)
  * @param token_array The tokens array.
  * @return void
  */
-void parser(token_array_t *token_array)
+void parse(token_array_t *token_array)
 {
     program_t *program = parse_program(token_array);
     print_program(program); // Find a way to fix this...

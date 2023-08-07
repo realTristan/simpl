@@ -35,6 +35,11 @@
         "initializer_list": "c",
         "variant": "c",
         "node_types.h": "c",
-        "print.h": "c"
+        "print.h": "c",
+        "ios": "c",
+        "atomic": "c",
+        "locale": "c",
+        "cstddef": "c",
+        "__tuple": "c"
     }
 }

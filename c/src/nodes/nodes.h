@@ -3,7 +3,6 @@
 
 #include "node_types.h"
 
-#include <stdbool.h>
 #include <stdlib.h>
 
 /**
@@ -17,9 +16,9 @@ program_t *new_program();
  *
  * @param type The type of the expression.
  * @param value The value of the expression.
- * @return stmt_t
+ * @return reg_expr_t
  */
-stmt_t new_expr_stmt(node_type type, char *value);
+reg_expr_t *new_reg_expr(node_type type, char *value);
 
 /**
  * @brief Creates a new binary expression node.
@@ -27,9 +26,28 @@ stmt_t new_expr_stmt(node_type type, char *value);
  * @param left The left binary expression.
  * @param right The right expression.
  * @param op The operator.
+ * @return bin_expr_t
+ */
+bin_expr_t *new_bin_expr(bin_expr_t *left, reg_expr_t *right, char *op);
+
+/**
+ * @brief Return a new binary expression statement
+ *
+ * @param left The left binary expression.
+ * @param right The right expression.
+ * @param op The operator.
  * @return stmt_t
  */
-stmt_t new_bin_expr_stmt(bin_expr_t *left, reg_expr_t *right, char *op);
+stmt_t *new_bin_expr_stmt(bin_expr_t *left, reg_expr_t *right, char *op);
+
+/**
+ * @brief Return a new regular expression statement
+ *
+ * @param type The type of the expression.
+ * @param value The value of the expression.
+ * @return stmt_ts
+ */
+stmt_t *new_reg_expr_stmt(node_type type, char *value);
 
 /**
  * @brief Set the stmt to binary expr object
@@ -37,7 +55,7 @@ stmt_t new_bin_expr_stmt(bin_expr_t *left, reg_expr_t *right, char *op);
  * @param stmt The statement.
  * @param bin_expr The binary expression.
  */
-void set_stmt_to_bin_expr(stmt_t *stmt, bin_expr_t bin_expr);
+void set_stmt_to_bin_expr(stmt_t *stmt, bin_expr_t *bin_expr);
 
 /**
  * @brief Set the stmt to expr object
@@ -45,6 +63,6 @@ void set_stmt_to_bin_expr(stmt_t *stmt, bin_expr_t bin_expr);
  * @param stmt The statement.
  * @param expr The expression.
  */
-void set_stmt_to_reg_expr(stmt_t *stmt, reg_expr_t reg_expr);
+void set_stmt_to_reg_expr(stmt_t *stmt, reg_expr_t *reg_expr);
 
 #endif // NODES_H

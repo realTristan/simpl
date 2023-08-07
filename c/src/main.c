@@ -23,7 +23,7 @@ int main(void)
 {
     // The source code
     // char *src = "let x = 45 * ( 10 - 2 )";
-    char *src = "x + 5 - 4";
+    char *src = "x + 7";
     // Segmentation fault from above is caused by the print function
 
     // Create a new token array
@@ -36,7 +36,7 @@ int main(void)
     print_token_array(token_array);
 
     // Parse the tokens
-    parser(token_array);
+    parse(token_array);
 }
 
 #endif // MAIN

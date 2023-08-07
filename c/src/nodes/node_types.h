@@ -101,27 +101,33 @@ typedef struct bin_expr_t
 /**
  * @brief A statement node.
  *
+ * @var type The type of the statement.
+ * @var reg_expr The expression.
+ * @var bin_expr The binary expression.
  */
 typedef struct stmt_t
 {
     node_type type; // NODE_TYPE_BINARY_EXPRESSION || NODE_TYPE_REGULAR_EXPRESSION
-    struct reg_expr_t expr;
-    struct bin_expr_t bin_expr;
+    struct reg_expr_t *reg_expr;
+    struct bin_expr_t *bin_expr;
 } stmt_t;
 
 /**
  * @brief Statement Array
+ * 
+ * @var values The values (stmt_t)
+ * @var size The size (size_t)
 */
 typedef struct stmt_array_t
 {
-    stmt_t *values;
+    stmt_t **values;
     size_t size;
 } stmt_array_t;
 
 /**
  * @brief A program node.
  * @type NODE_TYPE_PROGRAM
- *
+ * @var body The body of the program.
  */
 typedef struct program_t
 {

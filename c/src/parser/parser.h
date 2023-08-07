@@ -9,6 +9,6 @@
  *
  * @param token_array The tokens array.
  */
-void parser(token_array_t *token_array);
+void parse(token_array_t *token_array);
 
 #endif // PARSER_H

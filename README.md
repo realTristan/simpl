@@ -49,6 +49,12 @@
 - [ ] Native Methods
 - [ ] User-Defined Functions
 
+# Plan
+- [ ] Typescript Implementation
+- [ ] Java Implementation
+- [ ] C++ Implementation
+- [ ] C Implementation
+
 # License
 MIT License
 

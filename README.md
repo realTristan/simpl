@@ -1,40 +1,13 @@
 # simpl ![Stars](https://img.shields.io/github/stars/realTristan/simpl?color=brightgreen) ![Watchers](https://img.shields.io/github/watchers/realTristan/simpl?label=Watchers)
 ![image](https://github.com/realTristan/simpl/assets/75189508/67361db9-f3f6-4e55-ab95-4580addc40fd)
 
-### Lines of Code
-`615`
+# Plan
+- [ ] Typescript Implementation
+- [ ] Java Implementation
+- [ ] C++ Implementation
+- [ ] C Implementation
 
-# Lexer Preview
-<img width="552" alt="Screenshot 2023-07-23 at 9 22 54 AM" src="https://github.com/realTristan/simpl/assets/75189508/551ecc7a-2d97-4a8e-a9d8-2208fdbfb9f1">
-
-# Parser Preview
-```json
-{
-  "type": "0",
-  "body": [
-    {
-      "stmt_type": "2",
-      "expr": {
-        "value": "y"
-        "type": "4"
-      }
-    },
-    "BinaryExpr" {
-      "left": {
-        "type": 4
-        "value": "x"
-      },
-      "right": {
-        "type": 3
-        "value": "10"
-      },
-      "op": "*"
-    }
-  ]
-}
-```
-
-# Todo
+# Todo Typescript
 - [X] Lexer and Tokenizer
 - [X] Node Types
 - [X] Abstract Syntax Tree

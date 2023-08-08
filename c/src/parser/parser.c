@@ -19,7 +19,7 @@
 // Function declarations
 stmt_t *parse_stmt(token_array_t *token_array, int *parsing_index);
 
-#define f parse_token_stmt_handle_paren
+#define f parse_primary_stmt_handle_paren
 /**
  * @brief Handles a parenthesized expression.
  *
@@ -27,7 +27,7 @@ stmt_t *parse_stmt(token_array_t *token_array, int *parsing_index);
  * @param parsing_index The parsing index.
  * @return stmt_t
  */
-stmt_t *parse_token_stmt_handle_paren(token_array_t *token_array, int *parsing_index)
+stmt_t *parse_primary_stmt_handle_paren(token_array_t *token_array, int *parsing_index)
 {
     // Increment the index
     (*parsing_index)++;
@@ -47,7 +47,7 @@ stmt_t *parse_token_stmt_handle_paren(token_array_t *token_array, int *parsing_i
 }
 #undef f
 
-#define f parse_token_stmt
+#define f parse_primary_stmt
 /**
  * @brief Parses a primary expression.
  *
@@ -55,7 +55,7 @@ stmt_t *parse_token_stmt_handle_paren(token_array_t *token_array, int *parsing_i
  * @param parsing_index The parsing index.
  * @return stmt_t
  */
-stmt_t *parse_token_stmt(token_array_t *token_array, int *parsing_index)
+stmt_t *parse_primary_stmt(token_array_t *token_array, int *parsing_index)
 {
     // Get the right token
     token_t token = token_array->tokens[*parsing_index];
@@ -88,7 +88,7 @@ stmt_t *parse_token_stmt(token_array_t *token_array, int *parsing_index)
 
     // If there's an open paranthesis, parse the expression inside
     case TOKEN_TYPE_LEFT_PAREN:
-        return parse_token_stmt_handle_paren(token_array, parsing_index);
+        return parse_primary_stmt_handle_paren(token_array, parsing_index);
     default:
         return new_reg_expr_stmt(NODE_TYPE_UNKNOWN, NULL);
     }
@@ -106,7 +106,7 @@ stmt_t *parse_token_stmt(token_array_t *token_array, int *parsing_index)
 stmt_t *parse_multiplicative_stmt(token_array_t *token_array, int *parsing_index)
 {
     // Get the first token
-    stmt_t *res = parse_token_stmt(token_array, parsing_index);
+    stmt_t *res = parse_primary_stmt(token_array, parsing_index);
 
     // While (true)
     for (;;)
@@ -123,7 +123,7 @@ stmt_t *parse_multiplicative_stmt(token_array_t *token_array, int *parsing_index
         (*parsing_index)++;
 
         // Parse the left token
-        stmt_t *right = parse_token_stmt(token_array, parsing_index);
+        stmt_t *right = parse_primary_stmt(token_array, parsing_index);
 
         // Set to a binary expression
         if (res->type == NODE_TYPE_REGULAR_EXPRESSION)
@@ -166,7 +166,7 @@ stmt_t *parse_additive_stmt(token_array_t *token_array, int *parsing_index)
         (*parsing_index)++;
 
         // Parse the left token
-        stmt_t *right = parse_token_stmt(token_array, parsing_index);
+        stmt_t *right = parse_primary_stmt(token_array, parsing_index);
 
         // Set to a binary expression
         if (res->type == NODE_TYPE_REGULAR_EXPRESSION)

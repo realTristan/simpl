@@ -58,14 +58,14 @@ export interface NumericLiteral extends Stmt {
  * An identifier
  * @example
  * let x = 5;
- * // => Identifier { name: "x" }
+ * // => Identifier { value: "x" }
  * @example
  * let add = (a, b) => a + b;
- * // => Identifier { name: "add" }
+ * // => Identifier { value: "add" }
  */
 export interface Identifier extends Stmt {
   type: "Identifier";
-  name: string;
+  value: string;
 }
 
 /**
@@ -76,7 +76,10 @@ export interface Identifier extends Stmt {
  * @example
  * 1 + 2 * 3
  */
-export interface Expr extends Stmt {}
+export interface Expr extends Stmt {
+  type: NodeType;
+  value: number | string;
+}
 export interface BinaryExpr extends Expr {
   type: "BinaryExpr";
   operator: string;
@@ -88,14 +91,14 @@ export interface BinaryExpr extends Expr {
  * A call expression
  * @example
  * add(1, 2)
- * // => CallExpr { name: "add", params: [NumericLiteral, NumericLiteral] }
+ * // => CallExpr { value: "add", params: [NumericLiteral, NumericLiteral] }
  * @example
  * add(1, add(2, 3))
- * // => CallExpr { name: "add", params: [NumericLiteral, CallExpr] }
+ * // => CallExpr { value: "add", params: [NumericLiteral, CallExpr] }
  */
 export interface CallExpr extends Stmt {
   type: "CallExpr";
-  name: string;
+  value: string;
   params: Stmt[];
 }
 

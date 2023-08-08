@@ -47,7 +47,7 @@ export interface Token {
  */
 export const tokenize = (src: string): Token[] => {
   const tokens: Token[] = new Array<Token>();
-  const src_split: string[] = src.split(" ");
+  const src_split: string[] = src.split("");
 
   // Loop through the source code
   while (src_split.length > 0) {
@@ -69,6 +69,7 @@ export const tokenize = (src: string): Token[] => {
       case "-":
       case "*":
       case "/":
+      case "%":
         tokens.push({ value: value, type: TokenType.BinaryOperator });
         break;
       default:

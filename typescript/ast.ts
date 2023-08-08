@@ -13,6 +13,7 @@
 export type NodeType =
   | "Program"
   | "NumericLiteral"
+  | "NullLiteral"
   | "Identifier"
   | "BinaryExpr"
   | "CallExpr"
@@ -115,4 +116,18 @@ export interface UnaryExpr extends Stmt {
   type: "UnaryExpr";
   operator: string;
   argument: Stmt;
+}
+
+/**
+ * A null literal
+ * @example
+ * null
+ * // => NullLiteral
+ * @example
+ * let x = null;
+ * // => NullLiteral
+ */
+export interface NullLiteral extends Stmt {
+  type: "NullLiteral";
+  value: "null";
 }

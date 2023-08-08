@@ -2,6 +2,7 @@ import {
   BinaryExpr,
   Expr,
   Identifier,
+  NullLiteral,
   NumericLiteral,
   Program,
   Stmt,
@@ -115,7 +116,7 @@ export default class Parser {
       // Set the left to the new binary expression
       left = binexpr;
     }
-
+    
     // Return the left side of the expression. We do this because
     // the left side becomes the entire binary expression
     return left;
@@ -135,7 +136,7 @@ export default class Parser {
       const op: Token = this.tokens.shift();
 
       // Get the right side of the expression
-      const right: Expr = this.parsePrimaryExpr();
+      const right: Expr = this.parseMultiplicativeExpr();
 
       // Create a binary expression
       const binexpr: BinaryExpr = {
@@ -194,6 +195,13 @@ export default class Parser {
           type: "Identifier",
           value: token.value,
         } as Identifier;
+
+      // Null Literal Expression
+      case TokenType.Null:
+        return {
+          type: "NullLiteral",
+          value: null,
+        } as NullLiteral;
 
       // Let Statement
       case TokenType.Let:

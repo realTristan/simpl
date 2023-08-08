@@ -4,6 +4,7 @@ import { isNumber, isString } from "./utils.ts";
  * A token type
  */
 export enum TokenType {
+  Null,
   Number,
   Identifier,
   Equals,
@@ -18,6 +19,7 @@ export enum TokenType {
  */
 const KEYWORDS: { [key: string]: TokenType } = {
   let: TokenType.Let,
+  null: TokenType.Null,
 };
 
 /**

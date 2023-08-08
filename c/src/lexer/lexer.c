@@ -35,25 +35,25 @@ void tokenize(token_array_t *tokens, char *src)
         case '\t':
             continue;
         case TOKEN_TYPE_LEFT_PAREN_VALUE:
-            push_back_token(tokens, new_token(TOKEN_TYPE_LEFT_PAREN, "("));
+            push_back_token(tokens, new_token(TOKEN_TYPE_LEFT_PAREN, token_str));
             break;
         case TOKEN_TYPE_RIGHT_PAREN_VALUE:
-            push_back_token(tokens, new_token(TOKEN_TYPE_RIGHT_PAREN, ")"));
+            push_back_token(tokens, new_token(TOKEN_TYPE_RIGHT_PAREN, token_str));
             break;
         case TOKEN_TYPE_ASSIGN_VALUE:
-            push_back_token(tokens, new_token(TOKEN_TYPE_ASSIGN, "="));
+            push_back_token(tokens, new_token(TOKEN_TYPE_ASSIGN, token_str));
             break;
         case TOKEN_TYPE_PLUS_VALUE:
-            push_back_token(tokens, new_token(TOKEN_TYPE_PLUS, "+"));
+            push_back_token(tokens, new_token(TOKEN_TYPE_PLUS, token_str));
             break;
         case TOKEN_TYPE_MINUS_VALUE:
-            push_back_token(tokens, new_token(TOKEN_TYPE_MINUS, "-"));
+            push_back_token(tokens, new_token(TOKEN_TYPE_MINUS, token_str));
             break;
         case TOKEN_TYPE_MULTIPLY_VALUE:
-            push_back_token(tokens, new_token(TOKEN_TYPE_MULTIPLY, "*"));
+            push_back_token(tokens, new_token(TOKEN_TYPE_MULTIPLY, token_str));
             break;
         case TOKEN_TYPE_DIVIDE_VALUE:
-            push_back_token(tokens, new_token(TOKEN_TYPE_DIVIDE, "/"));
+            push_back_token(tokens, new_token(TOKEN_TYPE_DIVIDE, token_str));
             break;
         default:
             if (is_int(token_str))
@@ -64,11 +64,11 @@ void tokenize(token_array_t *tokens, char *src)
             {
                 if (strcmp(token_str, TOKEN_TYPE_LET_VALUE) == 0)
                 {
-                    push_back_token(tokens, new_token(TOKEN_TYPE_LET, "let"));
+                    push_back_token(tokens, new_token(TOKEN_TYPE_LET, token_str));
                 }
                 else if (strcmp(token_str, TOKEN_TYPE_NULL_VALUE) == 0)
                 {
-                    push_back_token(tokens, new_token(TOKEN_TYPE_NULL, "null"));
+                    push_back_token(tokens, new_token(TOKEN_TYPE_NULL, token_str));
                 }
                 else
                 {

@@ -82,7 +82,7 @@ stmt_t *parse_token_stmt(token_array_t *token_array, int *parsing_index)
     case TOKEN_TYPE_MULTIPLY:
     case TOKEN_TYPE_DIVIDE:
     {
-        reg_expr_t *right = new_reg_expr(NODE_TYPE_NUMERIC_LITERAL, "0");
+        reg_expr_t *right = new_reg_expr(NODE_TYPE_NUMERIC_LITERAL, token.value);
         return new_bin_expr_stmt(NULL, right, token.value);
     }
 

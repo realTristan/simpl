@@ -2,7 +2,7 @@
 ![image](https://github.com/realTristan/simpl/assets/75189508/67361db9-f3f6-4e55-ab95-4580addc40fd)
 
 # Preview (Typescript)
-```
+```rust
 >>  fn sub(a, b) { a - b }
 >>  print(sub(3, 4))
 -1

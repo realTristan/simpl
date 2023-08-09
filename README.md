@@ -13,7 +13,7 @@
 ```
 
 ### Replit Playground
-https://replit.com/@realTristan/simplts
+[https://replit.com/@realTristan/simplts](https://replit.com/@realTristan/simpl)
 
 # Plan
 - [ ] Typescript Implementation

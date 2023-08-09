@@ -1,17 +1,29 @@
-import { isNumber, isString } from "./utils.ts";
+import { isNumber, isString, isWhitespace } from "./utils.ts";
 
 /**
  * A token type
  */
 export enum TokenType {
-  Null,
-  Number,
-  Identifier,
-  Equals,
-  OpenParen,
-  CloseParen,
-  BinaryOperator,
-  Let,
+  // Literals
+  Null, // null
+  Number, // 0, 1, 2, 3, 4, 5, 6, 7, 8, 9
+  Identifier, // x, y, z
+
+  // Operators
+  Equals, // =
+  OpenParen, // (
+  CloseParen, // )
+  BinaryOperator, // +, -, *, /, %
+  Semicolon, // ;
+  EOF, // End of file
+  Comma, // ,
+  Colon, // :
+  OpenBrace, // {
+  CloseBrace, // }
+
+  // Variable declaration
+  Let, // let
+  Const, // const
 }
 
 /**
@@ -20,6 +32,8 @@ export enum TokenType {
 const KEYWORDS: { [key: string]: TokenType } = {
   let: TokenType.Let,
   null: TokenType.Null,
+  const: TokenType.Const,
+  simp: TokenType.Null,
 };
 
 /**
@@ -49,23 +63,38 @@ export interface Token {
  */
 export const tokenize = (src: string): Token[] => {
   const tokens: Token[] = new Array<Token>();
-  const src_split: string[] = src.split("");
+  const splitSrc: string[] = src.split("");
 
   // Loop through the source code
-  while (src_split.length > 0) {
+  while (splitSrc.length > 0) {
     // Get the value
-    let value: string = src_split.shift()!;
+    let value: string = splitSrc.shift()!;
 
     // Determine what type of token the value is
     switch (value) {
       case "=":
         tokens.push({ value: value, type: TokenType.Equals });
         break;
+      case ";":
+        tokens.push({ value: value, type: TokenType.Semicolon });
+        break;
       case "(":
         tokens.push({ value: value, type: TokenType.OpenParen });
         break;
       case ")":
         tokens.push({ value: value, type: TokenType.CloseParen });
+        break;
+      case ",":
+        tokens.push({ value: value, type: TokenType.Comma });
+        break;
+      case ":":
+        tokens.push({ value: value, type: TokenType.Colon });
+        break;
+      case "{":
+        tokens.push({ value: value, type: TokenType.OpenBrace });
+        break;
+      case "}":
+        tokens.push({ value: value, type: TokenType.CloseBrace });
         break;
       case "+":
       case "-":
@@ -75,24 +104,45 @@ export const tokenize = (src: string): Token[] => {
         tokens.push({ value: value, type: TokenType.BinaryOperator });
         break;
       default:
+        // Get the current token
+        const current = (): string => splitSrc[0];
+
         // Check if the value is a string
         if (isString(value)) {
+          let str: string = value;
+          while (splitSrc.length > 0 && isString(current())) {
+            str += splitSrc.shift()!;
+          }
+
           // Check for reserved keywords
-          if (KEYWORDS[value.toLowerCase()])
-            tokens.push({ value: value, type: KEYWORDS[value.toLowerCase()] });
-          else tokens.push({ value: value, type: TokenType.Identifier });
+          if (KEYWORDS[str.toLowerCase()]) {
+            tokens.push({ value: str, type: KEYWORDS[str.toLowerCase()] });
+          } else {
+            tokens.push({ value: str, type: TokenType.Identifier });
+          }
         }
 
         // Check if the value is a number
-        else if (isNumber(value))
-          tokens.push({ value: value, type: TokenType.Number });
+        else if (isNumber(value)) {
+          let num: string = value;
+          while (splitSrc.length > 0 && isNumber(current())) {
+            num += splitSrc.shift()!;
+          }
+
+          // Push the number token
+          tokens.push({ value: num, type: TokenType.Number });
+        }
+
         // Else if the value is skippable
-        else if (value.match(/\s/)) continue;
+        else if (isWhitespace(value)) continue;
         // Throw an error if the value is neither a number or string
         else throw new Error(`Invalid token: ${value}`);
         break;
     }
   }
+
+  // Push the EOF token
+  // tokens.push({ value: "EOF", type: TokenType.EOF });
 
   // Return the array of tokens
   return tokens;

@@ -27,3 +27,12 @@ export const isNumber = (value: string): boolean => {
 export const isString = (value: string): boolean => {
   return value.match(/[a-z]/i) ? true : false;
 };
+
+/**
+ * Check if the value is a whitespace character
+ * @param value The value to check
+ * @returns True if the value is a whitespace character, false otherwise
+ */
+export const isWhitespace = (value: string): boolean => {
+  return value === " " || value === "\n" || value === "\t" || value === "\r";
+};

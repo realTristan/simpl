@@ -1,3 +1,5 @@
+import { Token } from "./lexer.ts";
+
 /**
  * A node type
  * @example
@@ -11,13 +13,22 @@
  * // => Identifier
  */
 export type NodeType =
+  // Statements
   | "Program"
+  | "VariableDeclaration"
+
+  // Expressions
+  | "AssignmentExpr"
+  | "BinaryExpr"
+  | "CallExpr"
+  | "UnaryExpr"
+
+  // Literals
   | "NumericLiteral"
   | "NullLiteral"
   | "Identifier"
-  | "BinaryExpr"
-  | "CallExpr"
-  | "UnaryExpr";
+  | "Property"
+  | "ObjectLiteral";
 
 /**
  * A statement
@@ -42,6 +53,16 @@ export interface Program extends Stmt {
 }
 
 /**
+ * Variable declaration expression
+ */
+export interface VarDeclaration extends Stmt {
+  type: "VariableDeclaration";
+  constant: boolean;
+  identifier: string;
+  value: Expr | undefined;
+}
+
+/**
  * A numeric literal
  * @example
  * 5
@@ -50,7 +71,7 @@ export interface Program extends Stmt {
  * 5 + 5
  * // => BinaryExpr { operator: "+", left: NumericLiteral, right: NumericLiteral }
  */
-export interface NumericLiteral extends Stmt {
+export interface NumericLiteral extends Expr {
   type: "NumericLiteral";
   value: number;
 }
@@ -64,7 +85,7 @@ export interface NumericLiteral extends Stmt {
  * let add = (a, b) => a + b;
  * // => Identifier { value: "add" }
  */
-export interface Identifier extends Stmt {
+export interface Identifier extends Expr {
   type: "Identifier";
   value: string;
 }
@@ -77,15 +98,25 @@ export interface Identifier extends Stmt {
  * @example
  * 1 + 2 * 3
  */
-export interface Expr extends Stmt {
-  type: NodeType;
-  value: number | string;
-}
+export interface Expr extends Stmt {}
 export interface BinaryExpr extends Expr {
   type: "BinaryExpr";
   operator: string;
   left: Expr;
   right: Expr;
+}
+
+/**
+ * An assignment expression
+ * @example
+ * x = 5
+ * @example
+ * x = add(1, 2)
+ */
+export interface AssignmentExpr extends Expr {
+  type: "AssignmentExpr";
+  assignee: Identifier;
+  value: Expr;
 }
 
 /**
@@ -97,7 +128,7 @@ export interface BinaryExpr extends Expr {
  * add(1, add(2, 3))
  * // => CallExpr { value: "add", params: [NumericLiteral, CallExpr] }
  */
-export interface CallExpr extends Stmt {
+export interface CallExpr extends Expr {
   type: "CallExpr";
   value: string;
   params: Stmt[];
@@ -112,7 +143,7 @@ export interface CallExpr extends Stmt {
  * -add(1, 2)
  * // => UnaryExpr { operator: "-", argument: CallExpr }
  */
-export interface UnaryExpr extends Stmt {
+export interface UnaryExpr extends Expr {
   type: "UnaryExpr";
   operator: string;
   argument: Stmt;
@@ -127,7 +158,29 @@ export interface UnaryExpr extends Stmt {
  * let x = null;
  * // => NullLiteral
  */
-export interface NullLiteral extends Stmt {
+export interface NullLiteral extends Expr {
   type: "NullLiteral";
   value: "null";
+}
+
+/**
+ * A property
+ * @example
+ * { x: 5 }
+ * // => Property { key: "x", value: NumericLiteral }
+ */
+export interface Property extends Expr {
+  type: "Property";
+  key: string;
+  value: Expr | undefined;
+}
+
+/**
+ * An object
+ * @example
+ * { x: 5 }
+ */
+export interface ObjectLiteral extends Expr {
+  type: "ObjectLiteral";
+  properties: Property[];
 }

@@ -21,22 +21,27 @@
  */
 int main(void)
 {
-    // The source code
-    // char *src = "let x = 45 * (10 - 2)";
-    char *src = "x + 3";
-    // Segmentation fault from above is caused by the print function
+    // Print repl intiialization notification
+    printf("\nrepl initialized. now coding in simpl.\n");
 
     // Create a new token array
     token_array_t *token_array = new_token_array();
 
-    // Tokenize the source
-    tokenize(token_array, src);
+    // While the user doesn't want to exit, tokenize the inputted src
+    while (1) {
+        char src[100];
+        printf("\n>> ");
+        fgets(src, 100, stdin);
 
-    // Print the tokens
-    print_token_array(token_array);
+        // Tokenize the source
+        tokenize(token_array, src);
 
-    // Parse the tokens
-    parse(token_array);
+        // Print the tokens
+        print_token_array(token_array);
+
+        // Parse the tokens
+        parse(token_array);
+    }
 }
 
 #endif // MAIN

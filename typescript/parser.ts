@@ -49,6 +49,15 @@ export default class Parser {
   }
 
   /**
+   * Remove a semicolon if it exists
+   * @returns void
+   */
+  private shiftSemiColon(): void {
+    if (this.currentToken && this.currentToken.type === TokenType.Semicolon)
+      this.tokens.shift();
+  }
+
+  /**
    * Check if the current token is additive
    * @returns boolean
    */
@@ -136,10 +145,6 @@ export default class Parser {
       constant: isConst,
     } as VarDeclaration;
 
-    // Verify that the final token is a semicolon to signal the line close.
-    // const end: Token = this.tokens.shift();
-    // this.expect(end, TokenType.Semicolon, "Expected semicolon");
-
     // Return the declaration
     return declaration;
   }
@@ -183,11 +188,6 @@ export default class Parser {
     const closeBrace: Token = this.tokens.shift();
     this.expect(closeBrace, TokenType.CloseBrace, "Expected close brace");
 
-    // If the next token is a semicolon and we're not in a 
-    // variable declaration, move past it
-    // if (this.currentToken && this.currentToken.type === TokenType.Semicolon)
-    //  this.tokens.shift();
-
     // Return the fn
     return {
       type: "FunctionDeclaration",
@@ -205,13 +205,25 @@ export default class Parser {
     switch (this.currentToken.type) {
       case TokenType.Let:
       case TokenType.Const:
-        return this.parseVariableDeclaration();
+        try {
+          return this.parseVariableDeclaration();
+        } finally {
+          this.shiftSemiColon();
+        }
 
       case TokenType.Function:
-        return this.parseFunctionDeclaration();
+        try {
+          return this.parseFunctionDeclaration();
+        } finally {
+          this.shiftSemiColon();
+        }
 
       default:
-        return this.parseExpr();
+        try {
+          return this.parseExpr();
+        } finally {
+          this.shiftSemiColon();
+        }
     }
   }
 
@@ -238,10 +250,6 @@ export default class Parser {
 
       // Allow for assignment chaining
       const value = this.parseAssignmentExpr();
-
-      // Make sure the end is a semicolon
-      const end: Token = this.tokens.shift();
-      this.expect(end, TokenType.Semicolon, "Expected semicolon");
 
       // Return the assignment expression
       return {
@@ -461,9 +469,6 @@ export default class Parser {
       // If the next token is a closing paren
       const next: Token = this.tokens.shift();
       if (next && next.type === TokenType.CloseParen) {
-        // If the next token is a semicolon, break
-        // if (this.currentToken && this.currentToken.type === TokenType.Semicolon)
-        //   this.tokens.shift();
         break;
       }
     }

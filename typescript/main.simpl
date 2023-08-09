@@ -3,7 +3,7 @@ fn add (x, y) {
 
   let second = x + y + first
 
-  first
+  first;
 }
 
 let result = add(1, 2)

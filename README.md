@@ -1,6 +1,9 @@
 # simpl ![Stars](https://img.shields.io/github/stars/realTristan/simpl?color=brightgreen) ![Watchers](https://img.shields.io/github/watchers/realTristan/simpl?label=Watchers)
 ![image](https://github.com/realTristan/simpl/assets/75189508/67361db9-f3f6-4e55-ab95-4580addc40fd)
 
+# Preview (Typescript)
+<img width="196" alt="Screenshot 2023-08-09 at 11 28 13 AM" src="https://github.com/realTristan/simpl/assets/75189508/aec2d386-140c-464a-a82f-083de6901f33">
+
 # Plan
 - [ ] Typescript Implementation
 - [ ] Java Implementation

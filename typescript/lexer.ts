@@ -36,7 +36,6 @@ const KEYWORDS: { [key: string]: TokenType } = {
   let: TokenType.Let,
   null: TokenType.Null,
   const: TokenType.Const,
-  simp: TokenType.Null,
 };
 
 /**

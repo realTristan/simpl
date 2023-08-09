@@ -1,4 +1,11 @@
-import { RuntimeValue, BOOL } from "./values.ts";
+import {
+  RuntimeValue,
+  BOOL,
+  NATIVEFN,
+  NULL,
+  FnCall,
+  NumberValue,
+} from "./values.ts";
 
 export default class Environment {
   private parent: Environment | null;
@@ -16,9 +23,31 @@ export default class Environment {
    * @returns void
    */
   public setPrimitiveVariables(): void {
+    // Defining native variables
     this.declare("true", BOOL(true), true);
     this.declare("false", BOOL(false), true);
     this.declare("null", BOOL(false), true);
+
+    // Declaring native functions
+    this.declare(
+      "print",
+      NATIVEFN((args: RuntimeValue[], _env: Environment) => {
+        for (const arg of args) {
+          // If the runtime value is null, print null
+          if (arg.type === "null") {
+            console.log("null");
+          }
+
+          // If the runtime value is a string, print the string
+          else if (arg.type === "number") {
+            console.log((arg as NumberValue).value);
+          }
+        }
+
+        return NULL;
+      }),
+      true
+    );
   }
 
   /**

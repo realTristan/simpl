@@ -1,7 +1,15 @@
+import Environment from "./env.ts";
+
 /**
  * The differnet value types. More to be added.
  */
-export type ValueType = "null" | "number" | "boolean" | "string" | "object";
+export type ValueType =
+  | "null"
+  | "number"
+  | "boolean"
+  | "string"
+  | "object"
+  | "nativefn";
 
 /**
  * Main runtime value interface to be extended upon
@@ -49,6 +57,24 @@ export interface ObjectValue extends RuntimeValue {
   type: "object";
   properties: { [key: string]: RuntimeValue };
 }
+
+/**
+ * Native function value
+ */
+export type FnCall = (args: RuntimeValue[], env: Environment) => RuntimeValue;
+export interface NativeFnValue extends RuntimeValue {
+  type: "nativefn";
+  call: FnCall;
+}
+
+/**
+ * Make a native function value
+ * @param call The function call
+ * @return RuntimeValue
+ */
+export const NATIVEFN = (call: FnCall): NativeFnValue => {
+  return { type: "nativefn", call: call } as NativeFnValue;
+};
 
 /**
  * Make a string value

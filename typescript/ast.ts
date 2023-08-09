@@ -1,5 +1,3 @@
-import { Token } from "./lexer.ts";
-
 /**
  * A node type
  * @example
@@ -131,7 +129,7 @@ export interface AssignmentExpr extends Expr {
  */
 export interface CallExpr extends Expr {
   type: "CallExpr";
-  arguments: Expr[];
+  args: Expr[];
   caller: Expr;
 }
 

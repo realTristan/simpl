@@ -369,7 +369,7 @@ export default class Parser {
     let callExpr: Expr = {
       type: "CallExpr",
       caller: caller,
-      arguments: this.parseArguments(),
+      args: this.parseArgs(),
     } as CallExpr;
 
     // If open paren
@@ -385,7 +385,7 @@ export default class Parser {
    * Parse arguments
    * @returns Expr[]
    */
-  private parseArguments(): Expr[] {
+  private parseArgs(): Expr[] {
     // Make sure the next token is an open paren
     const openParen: Token = this.tokens.shift();
     this.expect(openParen, TokenType.OpenParen, "Expected open paren");
@@ -397,15 +397,20 @@ export default class Parser {
     while (
       this.tokens.length > 0 &&
       this.currentToken &&
-      this.currentToken.type === TokenType.Comma &&
-      this.tokens.shift()
+      this.currentToken.type !== TokenType.CloseParen
     ) {
       args.push(this.parseAssignmentExpr());
-    }
 
-    // Make sure the next token is a close paren
-    const closeParen: Token = this.tokens.shift();
-    this.expect(closeParen, TokenType.CloseParen, "Expected close paren");
+      // Make sure the next token is a close paren
+      let end: Token = this.tokens.shift();
+      this.expect(end, TokenType.CloseParen, "Expected close paren");
+
+      // If the next token is a semicolon, break
+      if (this.currentToken && this.currentToken.type === TokenType.Semicolon) {
+        this.tokens.shift();
+        break;
+      }
+    }
 
     // Return the arguments
     return args;
@@ -426,42 +431,37 @@ export default class Parser {
     ) {
       // Get the operator
       const op: Token = this.tokens.shift();
-      let property: Expr;
-      let computed: boolean;
 
       // Non computed
       if (op.type === TokenType.Dot) {
-        // Get the property
-        computed = false;
-        property = this.parsePrimaryExpr();
+        const property: Expr = this.parsePrimaryExpr();
 
         // Expect an identifier
         this.expect(property, "Identifier", "Expected identifier");
+
+        // Update the object
+        object = {
+          type: "MemberExpr",
+          object: object,
+          property: property,
+          computed: false,
+        } as MemberExpr;
       }
 
       // Computed
       else {
-        // This allows for chaining
-        // Get the property
-        computed = true;
-        property = this.parseExpr();
-
         // Get the closing bracket
-        const closeBracket: Token = this.tokens.shift();
-        this.expect(
-          closeBracket,
-          TokenType.CloseBracket,
-          "Expected close bracket"
-        );
-      }
+        const bracket: Token = this.tokens.shift();
+        this.expect(bracket, TokenType.CloseBracket, "Expected close bracket");
 
-      // Set the object
-      object = {
-        type: "MemberExpr",
-        object: object,
-        property: property,
-        computed: computed,
-      } as MemberExpr;
+        // Update the object
+        object = {
+          type: "MemberExpr",
+          object: object,
+          property: this.parseExpr(),
+          computed: true,
+        } as MemberExpr;
+      }
     }
 
     // Return the object

@@ -4,7 +4,7 @@ import {
   NULL,
   NUMBER,
   ObjectValue,
-  StringValue,
+  NativeFnValue,
 } from "./values.ts";
 
 import {
@@ -171,7 +171,7 @@ function evaluateMemberExpression(
   node: MemberExpr,
   env: Environment
 ): RuntimeValue {
-  return;
+  return NULL;
 }
 
 /**
@@ -184,7 +184,17 @@ function evaluateCallExpression(
   node: CallExpr,
   env: Environment
 ): RuntimeValue {
-  return;
+  // Evaluate each argument
+  const args = node.args.map((arg) => evaluate(arg, env));
+
+  // Evaluate the function itself
+  const fn = evaluate(node.caller, env);
+
+  // If unknown function
+  if (fn && fn.type !== "nativefn") throw new Error(`No function "${fn.type}"`);
+
+  // Call the function and return it's runtime value
+  return (fn as NativeFnValue).call(args, env);
 }
 
 /**

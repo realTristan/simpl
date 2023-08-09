@@ -1,13 +1,4 @@
 let foo = 5;
-const obj = {
-  x: 100,
-  y: 32,
-  foo,
-  complex: {
-    bar: true,
-  },
-};
+let x = 2;
 
-let x = obj.x;
-let y = obj.y;
-x + y
+print(foo + x);

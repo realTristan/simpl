@@ -16,10 +16,7 @@ typedef enum token_type
     TOKEN_TYPE_NULL,
     TOKEN_TYPE_LET,
     TOKEN_TYPE_NUMBER,
-    TOKEN_TYPE_PLUS,
-    TOKEN_TYPE_MINUS,
-    TOKEN_TYPE_MULTIPLY,
-    TOKEN_TYPE_DIVIDE,
+    TOKEN_TYPE_BINARY_OPERATOR,
     TOKEN_TYPE_LEFT_PAREN,
     TOKEN_TYPE_RIGHT_PAREN,
     TOKEN_TYPE_LEFT_BRACE,
@@ -87,56 +84,6 @@ typedef struct token_t
  * @return token_t The token.
  */
 token_t new_token(token_type type, char *value);
-
-
-//////////////////////////////////////
-//   The value of each token type   //
-//////////////////////////////////////
-
-#define TOKEN_TYPE_NULL_VALUE "null"
-#define TOKEN_TYPE_LET_VALUE "let"
-#define TOKEN_TYPE_PLUS_VALUE '+'
-#define TOKEN_TYPE_MINUS_VALUE '-'
-#define TOKEN_TYPE_MULTIPLY_VALUE '*'
-#define TOKEN_TYPE_DIVIDE_VALUE '/'
-#define TOKEN_TYPE_LEFT_PAREN_VALUE '('
-#define TOKEN_TYPE_RIGHT_PAREN_VALUE ')'
-#define TOKEN_TYPE_LEFT_BRACE_VALUE '{'
-#define TOKEN_TYPE_RIGHT_BRACE_VALUE '}'
-#define TOKEN_TYPE_LEFT_BRACKET_VALUE '['
-#define TOKEN_TYPE_RIGHT_BRACKET_VALUE ']'
-#define TOKEN_TYPE_COMMA_VALUE ','
-#define TOKEN_TYPE_SEMICOLON_VALUE ';'
-#define TOKEN_TYPE_COLON_VALUE ':'
-#define TOKEN_TYPE_DOT_VALUE '.'
-#define TOKEN_TYPE_EQUAL_VALUE '=='
-#define TOKEN_TYPE_NOT_EQUAL_VALUE '!='
-#define TOKEN_TYPE_LESS_THAN_VALUE '<'
-#define TOKEN_TYPE_LESS_THAN_EQUAL_VALUE '<='
-#define TOKEN_TYPE_GREATER_THAN_VALUE '>'
-#define TOKEN_TYPE_GREATER_THAN_EQUAL_VALUE '>='
-#define TOKEN_TYPE_ASSIGN_VALUE '='
-#define TOKEN_TYPE_PLUS_ASSIGN_VALUE '+='
-#define TOKEN_TYPE_MINUS_ASSIGN_VALUE '-='
-#define TOKEN_TYPE_MULTIPLY_ASSIGN_VALUE '*='
-#define TOKEN_TYPE_DIVIDE_ASSIGN_VALUE '/='
-#define TOKEN_TYPE_MODULO_ASSIGN_VALUE '%='
-#define TOKEN_TYPE_BITWISE_AND_ASSIGN_VALUE '&='
-#define TOKEN_TYPE_BITWISE_OR_ASSIGN_VALUE '|='
-#define TOKEN_TYPE_BITWISE_XOR_ASSIGN_VALUE '^='
-#define TOKEN_TYPE_BITWISE_NOT_ASSIGN_VALUE '~='
-#define TOKEN_TYPE_LOGICAL_AND_VALUE '&&'
-#define TOKEN_TYPE_LOGICAL_OR_VALUE '||'
-#define TOKEN_TYPE_LOGICAL_NOT_VALUE '!'
-#define TOKEN_TYPE_BITWISE_AND_VALUE '&'
-#define TOKEN_TYPE_BITWISE_OR_VALUE '|'
-#define TOKEN_TYPE_BITWISE_XOR_VALUE '^'
-#define TOKEN_TYPE_BITWISE_NOT_VALUE '~'
-#define TOKEN_TYPE_MODULO_VALUE '%'
-#define TOKEN_TYPE_INCREMENT_VALUE '++'
-#define TOKEN_TYPE_DECREMENT_VALUE '--'
-#define TOKEN_TYPE_COMMENT_VALUE '//'
-#define TOKEN_TYPE_NEWLINE_VALUE '\n'
-#define TOKEN_TYPE_WHITESPACE_VALUE ' '
+token_t new_token_char(token_type type, char value);
 
 #endif // TOKEN_H

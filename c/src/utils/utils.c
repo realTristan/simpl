@@ -31,6 +31,10 @@ int is_int(char *s)
     }
     return 1;
 }
+int is_int_char(char c)
+{
+    return c >= '0' && c <= '9';
+}
 
 /**
  * @brief Checks if a character is a digit.
@@ -49,6 +53,19 @@ int is_alpha(char *s)
         }
     }
     return 1;
+}
+int is_alpha_char(char c)
+{
+    return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z');
+}
+
+/**
+ * Check if the character is a whitespace character.
+ * @return int
+*/
+int is_whitespace(char c)
+{
+    return c == ' ' || c == '\n' || c == '\t' || c == '\r';
 }
 
 /**

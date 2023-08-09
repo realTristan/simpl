@@ -19,68 +19,105 @@
 void tokenize(token_array_t *tokens, char *src)
 {
     // Split the src
-    split_array_t split_tokens = split_str(src, ' ');
+    // split_array_t split_tokens = split_str(src, ' ');
+
+    // Get the length of the src
+    const size_t srclen = strlen(src);
 
     // Build each token
-    for (int i = 0; i < split_tokens.size; i++)
+    for (unsigned int i = 0; i < srclen; i++)
     {
-        // Pop the token
-        char *token_str = split_tokens.values[i];
-
         // Check the token type
-        switch (token_str[0])
+        switch (src[i])
         {
         case ' ':
         case '\n':
         case '\t':
             continue;
-        case TOKEN_TYPE_LEFT_PAREN_VALUE:
-            push_back_token(tokens, new_token(TOKEN_TYPE_LEFT_PAREN, token_str));
+        case '(':
+            push_back_token(tokens, new_token_char(TOKEN_TYPE_LEFT_PAREN, '('));
             break;
-        case TOKEN_TYPE_RIGHT_PAREN_VALUE:
-            push_back_token(tokens, new_token(TOKEN_TYPE_RIGHT_PAREN, token_str));
+        case ')':
+            push_back_token(tokens, new_token_char(TOKEN_TYPE_RIGHT_PAREN, ')'));
             break;
-        case TOKEN_TYPE_ASSIGN_VALUE:
-            push_back_token(tokens, new_token(TOKEN_TYPE_ASSIGN, token_str));
+        case '=':
+            push_back_token(tokens, new_token_char(TOKEN_TYPE_ASSIGN, '='));
             break;
-        case TOKEN_TYPE_PLUS_VALUE:
-            push_back_token(tokens, new_token(TOKEN_TYPE_PLUS, token_str));
-            break;
-        case TOKEN_TYPE_MINUS_VALUE:
-            push_back_token(tokens, new_token(TOKEN_TYPE_MINUS, token_str));
-            break;
-        case TOKEN_TYPE_MULTIPLY_VALUE:
-            push_back_token(tokens, new_token(TOKEN_TYPE_MULTIPLY, token_str));
-            break;
-        case TOKEN_TYPE_DIVIDE_VALUE:
-            push_back_token(tokens, new_token(TOKEN_TYPE_DIVIDE, token_str));
+        case '+':
+        case '-':
+        case '*':
+        case '/':
+            push_back_token(tokens, new_token_char(TOKEN_TYPE_BINARY_OPERATOR, src[i]));
             break;
         default:
-            if (is_int(token_str))
+        {
+            if (is_alpha_char(src[i]))
             {
-                push_back_token(tokens, new_token(TOKEN_TYPE_NUMBER, token_str));
-            }
-            else if (is_alpha(token_str))
-            {
-                if (strcmp(token_str, TOKEN_TYPE_LET_VALUE) == 0)
+                // Get the identifier
+                char *str = malloc(sizeof(char *) * 100); //(srclen - i + 1));
+                int index = 0;
+                while (i < srclen && is_alpha_char(src[i]) && !is_whitespace(src[i]))
                 {
-                    push_back_token(tokens, new_token(TOKEN_TYPE_LET, token_str));
+                    str[index] = src[i];
+                    index++;
+                    i++;
                 }
-                else if (strcmp(token_str, TOKEN_TYPE_NULL_VALUE) == 0)
+                i--;
+
+                // Convert the str to it's actual size
+                char *tmp = malloc(sizeof(char) * (index + 1));
+                for (unsigned int j = 0; j < index; j++)
                 {
-                    push_back_token(tokens, new_token(TOKEN_TYPE_NULL, token_str));
+                    tmp[j] = str[j];
+                }
+                tmp[index] = '\0';
+
+                // Push back the identifier
+                if (strcmp(tmp, "let") == 0)
+                {
+                    push_back_token(tokens, new_token(TOKEN_TYPE_LET, tmp));
+                }
+                else if (strcmp(tmp, "null") == 0)
+                {
+                    push_back_token(tokens, new_token(TOKEN_TYPE_NULL, tmp));
                 }
                 else
                 {
-                    push_back_token(tokens, new_token(TOKEN_TYPE_IDENTIFIER, token_str));
+                    push_back_token(tokens, new_token(TOKEN_TYPE_IDENTIFIER, tmp));
                 }
             }
+            else if (is_int_char(src[i]))
+            {
+                // Get the number
+                char *num = malloc(sizeof(char *) * 100); //(srclen - i + 1));
+                int index = 0;
+                while (i < srclen && is_int_char(src[i]) && !is_whitespace(src[i]))
+                {
+                    num[index] = src[i];
+                    index++;
+                    i++;
+                }
+                i--;
+
+                // Convert the number to it's actual size
+                char *tmp = malloc(sizeof(char) * (index + 1));
+                for (unsigned int j = 0; j < index; j++)
+                {
+                    tmp[j] = num[j];
+                }
+                tmp[index] = '\0';
+
+                // Push back the number
+                push_back_token(tokens, new_token(TOKEN_TYPE_NUMBER, tmp));
+            }
+
             else
             {
-                printf("Unknown token: [%s]\n", token_str);
+                printf("Unknown token: [%c]\n", src[i]);
                 exit(1);
             }
             break;
+        }
         }
     }
 

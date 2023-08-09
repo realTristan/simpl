@@ -20,6 +20,7 @@ typedef struct split_array_t
  * @return false If the character is not an integer.
  */
 int is_int(char *s);
+int is_int_char(char c);
 
 /**
  * @brief Checks if a character is a digit.
@@ -29,6 +30,13 @@ int is_int(char *s);
  * @return false If the character is not a digit.
  */
 int is_alpha(char *s);
+int is_alpha_char(char c);
+
+/**
+ * Check if the character is a whitespace character.
+ * @return int
+*/
+int is_whitespace(char c);
 
 /**
  * @brief Splits a string by a delimiter.

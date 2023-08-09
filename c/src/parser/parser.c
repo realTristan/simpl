@@ -10,7 +10,6 @@
 #include "print.h"
 
 #include <stdlib.h>
-#include <stdbool.h>
 #include <string.h>
 #include <stdio.h>
 
@@ -77,10 +76,7 @@ stmt_t *parse_primary_stmt(token_array_t *token_array, int *parsing_index)
         return new_reg_expr_stmt(NODE_TYPE_NULL_LITERAL, token.value);
 
     // These return a NODE_TYPE_BINARY_EXPRESSION Statement
-    case TOKEN_TYPE_PLUS:
-    case TOKEN_TYPE_MINUS:
-    case TOKEN_TYPE_MULTIPLY:
-    case TOKEN_TYPE_DIVIDE:
+    case TOKEN_TYPE_BINARY_OPERATOR:
     {
         reg_expr_t *right = new_reg_expr(NODE_TYPE_NUMERIC_LITERAL, token.value);
         return new_bin_expr_stmt(NULL, right, token.value);
@@ -92,6 +88,32 @@ stmt_t *parse_primary_stmt(token_array_t *token_array, int *parsing_index)
     default:
         return new_reg_expr_stmt(NODE_TYPE_UNKNOWN, NULL);
     }
+}
+#undef f
+
+#define f is_multiplicative_operator
+/**
+ * @brief Checks if the token is a multiplicative operator.
+ *
+ * @param token The token.
+ * @return int
+ */
+int is_multiplicative_operator(token_t token)
+{
+    return token.type == TOKEN_TYPE_BINARY_OPERATOR && (strcmp(token.value, "*") == 0 || strcmp(token.value, "/") == 0) ? 1 : 0;
+}
+#undef f
+
+#define f is_additive_operator
+/**
+ * @brief Checks if the token is an additive operator.
+ *
+ * @param token The token.
+ * @return int
+ */
+int is_additive_operator(token_t token)
+{
+    return token.type == TOKEN_TYPE_BINARY_OPERATOR && (strcmp(token.value, "+") == 0 || strcmp(token.value, "-") == 0) ? 1 : 0;
 }
 #undef f
 
@@ -116,8 +138,11 @@ stmt_t *parse_multiplicative_stmt(token_array_t *token_array, int *parsing_index
 
         // Get the right token
         token_t op = token_array->tokens[*parsing_index];
-        if (op.type != TOKEN_TYPE_MULTIPLY && op.type != TOKEN_TYPE_DIVIDE)
+        // If the operator is not a multiply or divide operator, break
+        if (!is_multiplicative_operator(op))
+        {
             break;
+        }
 
         // Increment the index to get the left token
         (*parsing_index)++;
@@ -159,8 +184,11 @@ stmt_t *parse_additive_stmt(token_array_t *token_array, int *parsing_index)
     {
         // Get the right token
         token_t op = token_array->tokens[*parsing_index];
-        if (op.type != TOKEN_TYPE_PLUS && op.type != TOKEN_TYPE_MINUS)
+        // If the operator is not a plus or a minus
+        if (!is_additive_operator(op))
+        {
             break;
+        }
 
         // Increment the index to get the left token
         (*parsing_index)++;
@@ -186,7 +214,6 @@ stmt_t *parse_additive_stmt(token_array_t *token_array, int *parsing_index)
     // printf("Resulting binary expression: ");
     // printf("\n%s %s %s\n", res->bin_expr->left->right->value, res->bin_expr->op, res->bin_expr->right->value);
 
-    
     // Return the result statement
     return res;
 }

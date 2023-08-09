@@ -13,14 +13,23 @@
 - [X] Abstract Syntax Tree
 - [X] Binary Operations
 - [X] Paren Binary Operations
-- [ ] Interpreter
-- [ ] Scope and Environments
-- [ ] Variables
-- [ ] Assignment
-- [ ] Object Values
-- [ ] Member and Calls
-- [ ] Native Methods
-- [ ] User-Defined Functions
+- [X] Interpreter
+- [X] Scope and Environments
+- [X] Variables
+- [X] Assignment
+- [X] Object Values
+- [X] Member and Calls
+- [X] Native Methods
+- [X] User-Defined Functions
+- [ ] If, Else, and Else If
+- [ ] While Loops
+- [ ] For Loops
+- [ ] Arrays
+- [ ] Classes
+- [ ] Inheritance
+- [ ] Try, Catch, and Finally
+- [ ] Async and Await
+- [ ] Strings
 
 # License
 MIT License

@@ -38,13 +38,13 @@ const repl = () => {
     const program = parser.parse(input);
 
     // Print the AST
-    console.log(program);
+    // console.log(program);
 
     // Get the result
     const result = evaluate(program, env);
 
     // Print the result
-    console.log(result);
+    // console.log(result);
   }
 };
 

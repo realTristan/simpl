@@ -4,12 +4,15 @@ import {
   NULL,
   NUMBER,
   ObjectValue,
+  StringValue,
 } from "./values.ts";
 
 import {
   AssignmentExpr,
   BinaryExpr,
+  CallExpr,
   Identifier,
+  MemberExpr,
   NumericLiteral,
   ObjectLiteral,
   Program,
@@ -159,6 +162,32 @@ function evaluateObjectLiteral(
 }
 
 /**
+ * Evaluate a member expression
+ * @param node the member expression node
+ * @param env the environment
+ * @returns RuntimeValue
+ */
+function evaluateMemberExpression(
+  node: MemberExpr,
+  env: Environment
+): RuntimeValue {
+  return;
+}
+
+/**
+ * Evaluate a call expression
+ * @param node the call expression node
+ * @param env the environment
+ * @returns RuntimeValue
+ */
+function evaluateCallExpression(
+  node: CallExpr,
+  env: Environment
+): RuntimeValue {
+  return;
+}
+
+/**
  * Evaluate a node
  * @param node the node to evaluate
  * @returns RuntimeValue
@@ -196,6 +225,14 @@ export function evaluate(node: Stmt, env: Environment): RuntimeValue {
     // Incase of object literal
     case "ObjectLiteral":
       return evaluateObjectLiteral(node as ObjectLiteral, env);
+
+    // Incase of member expression
+    case "MemberExpr":
+      return evaluateMemberExpression(node as MemberExpr, env);
+
+    // Incase of call expression
+    case "CallExpr":
+      return evaluateCallExpression(node as CallExpr, env);
 
     // Otherwise, throw an error indicating that the provided node
     // is not a valid node type

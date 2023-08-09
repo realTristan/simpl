@@ -51,6 +51,15 @@ export interface ObjectValue extends RuntimeValue {
 }
 
 /**
+ * Make a string value
+ * @param value The value
+ * @return RuntimeValue
+ */
+export const STRING = (value: string): StringValue => {
+  return { type: "string", value: value } as StringValue;
+};
+
+/**
  * Make a number value
  * @param value The value
  * @return RuntimeValue

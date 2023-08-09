@@ -1,8 +1,11 @@
 import {
   AssignmentExpr,
   BinaryExpr,
+  CallExpr,
   Expr,
   Identifier,
+  MemberExpr,
+  NodeType,
   NullLiteral,
   NumericLiteral,
   ObjectLiteral,
@@ -27,7 +30,11 @@ export default class Parser {
    * @param error the error to throw if the token is invalid
    * @returns boolean
    */
-  expect = (token: Token, type: TokenType, error: string): boolean => {
+  private expect = (
+    token: Token | Expr,
+    type: TokenType | NodeType,
+    error: string
+  ): boolean => {
     if (token && token.type !== type) throw new Error(error);
     return true;
   };
@@ -94,7 +101,7 @@ export default class Parser {
    * @note (const / let) identifier; or ident = expr;
    * @returns Sttmt
    */
-  parseVariableDeclaration(): Stmt {
+  private parseVariableDeclaration(): Stmt {
     // Get whether an immutable assignment
     const isConst: boolean = this.tokens.shift().type == TokenType.Const;
 
@@ -312,7 +319,7 @@ export default class Parser {
    */
   private parseMultiplicativeExpr(): Expr {
     // Get the left side of the expression
-    let left: Expr | BinaryExpr = this.parsePrimaryExpr();
+    let left: Expr | BinaryExpr = this.parseCallMemberExpr();
 
     // While there are still tokens to parse
     while (
@@ -324,7 +331,7 @@ export default class Parser {
       const op: Token = this.tokens.shift();
 
       // Get the right side of the expression
-      const right: Expr = this.parsePrimaryExpr();
+      const right: Expr = this.parseCallMemberExpr();
 
       // Create a binary expression
       const binexpr: BinaryExpr = {
@@ -341,6 +348,124 @@ export default class Parser {
     // Return the left side of the expression. We do this because
     // the left side becomes the entire binary expression
     return left;
+  }
+
+  /**
+   * Parse a call member expression
+   * @returns Expr
+   */
+  private parseCallMemberExpr(): Expr {
+    const member: Expr = this.parseMemberExpr();
+    if (this.currentToken && this.currentToken.type === TokenType.OpenParen)
+      return this.parseCallExpr(member);
+    return member;
+  }
+
+  /**
+   * Parse a call expression
+   * @returns Expr
+   */
+  private parseCallExpr(caller: Expr): Expr {
+    let callExpr: Expr = {
+      type: "CallExpr",
+      caller: caller,
+      arguments: this.parseArguments(),
+    } as CallExpr;
+
+    // If open paren
+    if (this.currentToken && this.currentToken.type === TokenType.OpenParen) {
+      callExpr = this.parseCallExpr(callExpr);
+    }
+
+    // Return the call expression
+    return callExpr;
+  }
+
+  /**
+   * Parse arguments
+   * @returns Expr[]
+   */
+  private parseArguments(): Expr[] {
+    // Make sure the next token is an open paren
+    const openParen: Token = this.tokens.shift();
+    this.expect(openParen, TokenType.OpenParen, "Expected open paren");
+
+    // Create an array of arguments
+    const args: Expr[] = [];
+
+    // While there are still tokens to parse
+    while (
+      this.tokens.length > 0 &&
+      this.currentToken &&
+      this.currentToken.type === TokenType.Comma &&
+      this.tokens.shift()
+    ) {
+      args.push(this.parseAssignmentExpr());
+    }
+
+    // Make sure the next token is a close paren
+    const closeParen: Token = this.tokens.shift();
+    this.expect(closeParen, TokenType.CloseParen, "Expected close paren");
+
+    // Return the arguments
+    return args;
+  }
+
+  /**
+   * Parse a member expression
+   * @returns Expr
+   */
+  private parseMemberExpr(): Expr {
+    let object: Expr = this.parsePrimaryExpr();
+
+    // If the current token is a dot or open bracket
+    while (
+      this.currentToken &&
+      (this.currentToken.type === TokenType.Dot ||
+        this.currentToken.type === TokenType.OpenBracket)
+    ) {
+      // Get the operator
+      const op: Token = this.tokens.shift();
+      let property: Expr;
+      let computed: boolean;
+
+      // Non computed
+      if (op.type === TokenType.Dot) {
+        // Get the property
+        computed = false;
+        property = this.parsePrimaryExpr();
+
+        // Expect an identifier
+        this.expect(property, "Identifier", "Expected identifier");
+      }
+
+      // Computed
+      else {
+        // This allows for chaining
+        // Get the property
+        computed = true;
+        property = this.parseExpr();
+
+        // Get the closing bracket
+        const closeBracket: Token = this.tokens.shift();
+        this.expect(
+          closeBracket,
+          TokenType.CloseBracket,
+          "Expected close bracket"
+        );
+      }
+
+      // Set the object
+      object = {
+        type: "MemberExpr",
+        object: object,
+        property: property,
+        computed: computed,
+      } as MemberExpr;
+    }
+
+    // Return the object
+    return object;
   }
 
   /**

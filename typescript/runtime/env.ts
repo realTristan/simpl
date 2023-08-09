@@ -90,6 +90,9 @@ export default class Environment {
    */
   public get(name: string): RuntimeValue {
     const env: Environment = this.resolve(name);
+    if (env.values[name] === undefined) {
+      throw new Error(`Undefined variable: ${name}`);
+    }
     return env.values[name].value;
   }
 

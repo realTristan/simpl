@@ -20,8 +20,9 @@ export type NodeType =
   // Expressions
   | "AssignmentExpr"
   | "BinaryExpr"
-  | "CallExpr"
   | "UnaryExpr"
+  | "MemberExpr"
+  | "CallExpr"
 
   // Literals
   | "NumericLiteral"
@@ -130,8 +131,21 @@ export interface AssignmentExpr extends Expr {
  */
 export interface CallExpr extends Expr {
   type: "CallExpr";
-  value: string;
-  params: Stmt[];
+  arguments: Expr[];
+  caller: Expr;
+}
+
+/**
+ * A member expression
+ * @example
+ * x.y
+ * // => MemberExpr { object: Identifier, property: Identifier }
+ */
+export interface MemberExpr extends Expr {
+  type: "MemberExpr";
+  object: Expr;
+  property: Expr;
+  computed: boolean;
 }
 
 /**

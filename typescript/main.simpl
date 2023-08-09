@@ -4,6 +4,10 @@ const obj = {
   y: 32,
   foo,
   complex: {
-    bar: true
-  }
+    bar: true,
+  },
 };
+
+let x = obj.x;
+let y = obj.y;
+x + y

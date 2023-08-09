@@ -17,6 +17,9 @@ const read = () => {
   // Produce AST From source-code
   const program = parser.parse(file);
 
+  // Print the AST
+  console.log(program);
+
   // Evaluate the program
   const result = evaluate(program, env);
 
@@ -35,6 +38,9 @@ const repl = () => {
 
     // Parse the input
     const program = parser.parse(input);
+
+    // Print the AST
+    console.log(program);
 
     // Get the result
     const result = evaluate(program, env);

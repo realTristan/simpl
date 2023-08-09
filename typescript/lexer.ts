@@ -20,6 +20,9 @@ export enum TokenType {
   Colon, // :
   OpenBrace, // {
   CloseBrace, // }
+  OpenBracket, // [
+  CloseBracket, // ]
+  Dot, // .
 
   // Variable declaration
   Let, // let
@@ -95,6 +98,15 @@ export const tokenize = (src: string): Token[] => {
         break;
       case "}":
         tokens.push({ value: value, type: TokenType.CloseBrace });
+        break;
+      case "[":
+        tokens.push({ value: value, type: TokenType.OpenBracket });
+        break;
+      case "]":
+        tokens.push({ value: value, type: TokenType.CloseBracket });
+        break;
+      case ".":
+        tokens.push({ value: value, type: TokenType.Dot });
         break;
       case "+":
       case "-":

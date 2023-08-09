@@ -3,6 +3,7 @@ import {
   BinaryExpr,
   CallExpr,
   Expr,
+  FnDeclaration,
   Identifier,
   MemberExpr,
   NodeType,
@@ -144,6 +145,59 @@ export default class Parser {
   }
 
   /**
+   * Parse a function declaration
+   * @returns Stmt
+   */
+  parseFunctionDeclaration(): Stmt {
+    // Shift past the fn
+    this.tokens.shift();
+
+    // Get the function name
+    const name: Token = this.tokens.shift();
+    this.expect(name, TokenType.Identifier, "Expected identifier");
+
+    const args: Expr[] = this.parseArgs();
+    const params: string[] = [];
+    for (const arg of args) {
+      if (arg.type !== "Identifier") {
+        throw new Error("Invalid function argument");
+      }
+      params.push((arg as Identifier).value);
+    }
+
+    // Verify that the next token is an open brace
+    const openBrace: Token = this.tokens.shift();
+    this.expect(openBrace, TokenType.OpenBrace, "Expected open brace");
+
+    // Store the body
+    const body: Stmt[] = [];
+    while (
+      this.tokens.length > 0 &&
+      this.currentToken &&
+      this.currentToken.type !== TokenType.CloseBrace
+    ) {
+      body.push(this.parseStmt());
+    }
+
+    // Expect a closing brace
+    const closeBrace: Token = this.tokens.shift();
+    this.expect(closeBrace, TokenType.CloseBrace, "Expected close brace");
+
+    // If the next token is a semicolon and we're not in a 
+    // variable declaration, move past it
+    // if (this.currentToken && this.currentToken.type === TokenType.Semicolon)
+    //  this.tokens.shift();
+
+    // Return the fn
+    return {
+      type: "FunctionDeclaration",
+      name: name.value,
+      params: params,
+      body,
+    } as FnDeclaration;
+  }
+
+  /**
    * Parse a statement
    * @returns Stmt
    */
@@ -152,6 +206,9 @@ export default class Parser {
       case TokenType.Let:
       case TokenType.Const:
         return this.parseVariableDeclaration();
+
+      case TokenType.Function:
+        return this.parseFunctionDeclaration();
 
       default:
         return this.parseExpr();
@@ -401,13 +458,12 @@ export default class Parser {
     ) {
       args.push(this.parseAssignmentExpr());
 
-      // Make sure the next token is a close paren
-      let end: Token = this.tokens.shift();
-      this.expect(end, TokenType.CloseParen, "Expected close paren");
-
-      // If the next token is a semicolon, break
-      if (this.currentToken && this.currentToken.type === TokenType.Semicolon) {
-        this.tokens.shift();
+      // If the next token is a closing paren
+      const next: Token = this.tokens.shift();
+      if (next && next.type === TokenType.CloseParen) {
+        // If the next token is a semicolon, break
+        // if (this.currentToken && this.currentToken.type === TokenType.Semicolon)
+        //   this.tokens.shift();
         break;
       }
     }

@@ -1,4 +1,8 @@
-let foo = 5;
-let x = 2;
+fn add (x, y) {
+  let result = x + y;
 
-print(foo + x);
+  result
+}
+
+let result = add(1, 2);
+print(result)

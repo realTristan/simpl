@@ -5,12 +5,14 @@ import {
   NUMBER,
   ObjectValue,
   NativeFnValue,
+  FnValue,
 } from "./values.ts";
 
 import {
   AssignmentExpr,
   BinaryExpr,
   CallExpr,
+  FnDeclaration,
   Identifier,
   MemberExpr,
   NumericLiteral,
@@ -191,10 +193,53 @@ function evaluateCallExpression(
   const fn = evaluate(node.caller, env);
 
   // If unknown function
-  if (fn && fn.type !== "nativefn") throw new Error(`No function "${fn.type}"`);
+  if (fn && fn.type === "nativefn") {
+    return (fn as NativeFnValue).call(args, env);
+  } else if (fn && fn.type === "fn") {
+    // Create a new scope and set the func type
+    const func = fn as FnValue;
+    const scope = new Environment(func.env);
 
-  // Call the function and return it's runtime value
-  return (fn as NativeFnValue).call(args, env);
+    // Declare the function parameters in that scope
+    for (let i = 0; i < func.params.length; i++) {
+      scope.declare(func.params[i], args[i], false);
+    }
+
+    // Evaluate the function body
+    let result: RuntimeValue = NULL;
+    for (const stmt of func.body) {
+      result = evaluate(stmt, scope);
+    }
+
+    // Return the result
+    return result;
+
+  } else {
+    throw new Error("Invalid function");
+  }
+}
+
+/**
+ * Evaluate a function declaration
+ * @param node the function declaration node
+ * @param env the environment
+ * @returns RuntimeValue
+ */
+function evaluateFunctionDeclaration(
+  node: FnDeclaration,
+  env: Environment
+): RuntimeValue {
+  // Create the function
+  const fn = {
+    type: "fn",
+    name: node.name,
+    params: node.params,
+    env: env,
+    body: node.body,
+  } as FnValue;
+
+  // Declare the function
+  return env.declare(node.name, fn, true);
 }
 
 /**
@@ -239,6 +284,10 @@ export function evaluate(node: Stmt, env: Environment): RuntimeValue {
     // Incase of member expression
     case "MemberExpr":
       return evaluateMemberExpression(node as MemberExpr, env);
+
+    // Incase of function declaration
+    case "FunctionDeclaration":
+      return evaluateFunctionDeclaration(node as FnDeclaration, env);
 
     // Incase of call expression
     case "CallExpr":

@@ -1,3 +1,4 @@
+import { Stmt } from "../ast.ts";
 import Environment from "./env.ts";
 
 /**
@@ -9,7 +10,8 @@ export type ValueType =
   | "boolean"
   | "string"
   | "object"
-  | "nativefn";
+  | "nativefn"
+  | "fn";
 
 /**
  * Main runtime value interface to be extended upon
@@ -66,6 +68,27 @@ export interface NativeFnValue extends RuntimeValue {
   type: "nativefn";
   call: FnCall;
 }
+
+/**
+ * Function value
+ */
+export interface FnValue extends RuntimeValue {
+  type: "fn";
+  name: string;
+  params: string[];
+  env: Environment;
+  body: Stmt[];
+}
+
+/**
+ * Make a function value
+ * @param params The function parameters
+ * @param env The function environment
+ * @return RuntimeValue
+ */
+export const FN = (params: string[], env: Environment): FnValue => {
+  return { type: "fn", params: params, env: env } as FnValue;
+};
 
 /**
  * Make a native function value

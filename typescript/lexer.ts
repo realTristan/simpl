@@ -27,6 +27,9 @@ export enum TokenType {
   // Variable declaration
   Let, // let
   Const, // const
+
+  // Function declaration
+  Function, // fn
 }
 
 /**
@@ -36,6 +39,7 @@ const KEYWORDS: { [key: string]: TokenType } = {
   let: TokenType.Let,
   null: TokenType.Null,
   const: TokenType.Const,
+  fn: TokenType.Function,
 };
 
 /**

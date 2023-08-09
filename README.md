@@ -12,6 +12,9 @@
 -2
 ```
 
+### Replit Playground
+https://replit.com/@realTristan/simplts
+
 # Plan
 - [ ] Typescript Implementation
 - [ ] Java Implementation

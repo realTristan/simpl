@@ -2,7 +2,15 @@
 ![image](https://github.com/realTristan/simpl/assets/75189508/67361db9-f3f6-4e55-ab95-4580addc40fd)
 
 # Preview (Typescript)
-<img width="196" alt="Screenshot 2023-08-09 at 11 28 13 AM" src="https://github.com/realTristan/simpl/assets/75189508/aec2d386-140c-464a-a82f-083de6901f33">
+```ts
+>>  fn sub(a, b) { a - b }
+>>  print(sub(3, 4))
+-1
+>>  let x = 4;
+>>  x = 2;
+>>  print(sub(x, 4))
+-2
+```
 
 # Plan
 - [ ] Typescript Implementation

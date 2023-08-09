@@ -17,7 +17,6 @@ https://replit.com/@realTristan/simpl
 
 # Plan
 - [ ] Typescript Implementation
-- [ ] Java Implementation
 - [ ] C++ Implementation
 - [ ] C Implementation
 

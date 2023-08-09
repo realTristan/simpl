@@ -1,6 +1,17 @@
 # simpl ![Stars](https://img.shields.io/github/stars/realTristan/simpl?color=brightgreen) ![Watchers](https://img.shields.io/github/watchers/realTristan/simpl?label=Watchers)
 ![image](https://github.com/realTristan/simpl/assets/75189508/67361db9-f3f6-4e55-ab95-4580addc40fd)
 
+# Preview (Typescript)
+```go
+>>  fn sub(a, b) { a - b }
+>>  print(sub(3, 4))
+-1
+>>  let x = 4;
+>>  x = 2;
+>>  print(sub(x, 4))
+-2
+```
+
 # Plan
 - [ ] Typescript Implementation
 - [ ] Java Implementation

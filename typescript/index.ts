@@ -54,4 +54,4 @@ read();
 // Repl
 repl();
 
-// deno run --allow-read main.ts
+// deno run --allow-read index.ts

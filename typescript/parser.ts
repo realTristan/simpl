@@ -137,8 +137,8 @@ export default class Parser {
     } as VarDeclaration;
 
     // Verify that the final token is a semicolon to signal the line close.
-    const end: Token = this.tokens.shift();
-    this.expect(end, TokenType.Semicolon, "Expected semicolon");
+    // const end: Token = this.tokens.shift();
+    // this.expect(end, TokenType.Semicolon, "Expected semicolon");
 
     // Return the declaration
     return declaration;

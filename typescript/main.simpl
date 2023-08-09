@@ -1,8 +1,10 @@
 fn add (x, y) {
-  let result = x + y;
+  let first = x + y
 
-  result
+  let second = x + y + first
+
+  first
 }
 
-let result = add(1, 2);
+let result = add(1, 2)
 print(result)

@@ -3,7 +3,6 @@ import {
   BOOL,
   NATIVEFN,
   NULL,
-  FnCall,
   NumberValue,
 } from "./values.ts";
 

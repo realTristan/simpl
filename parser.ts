@@ -204,26 +204,21 @@ export default class Parser {
   private parseStmt(): Stmt {
     switch (this.currentToken.type) {
       case TokenType.Let:
-      case TokenType.Const:
-        try {
-          return this.parseVariableDeclaration();
-        } finally {
-          this.shiftSemiColon();
-        }
-
-      case TokenType.Function:
-        try {
-          return this.parseFunctionDeclaration();
-        } finally {
-          this.shiftSemiColon();
-        }
-
-      default:
-        try {
-          return this.parseExpr();
-        } finally {
-          this.shiftSemiColon();
-        }
+      case TokenType.Const: {
+        const res: Stmt = this.parseVariableDeclaration();
+        this.shiftSemiColon();
+        return res;
+      }
+      case TokenType.Function: {
+        const res: Stmt = this.parseFunctionDeclaration();
+        this.shiftSemiColon();
+        return res;
+      }
+      default: {
+        const res: Stmt = this.parseExpr();
+        this.shiftSemiColon();
+        return res;
+      }
     }
   }
 

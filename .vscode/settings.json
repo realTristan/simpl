@@ -78,6 +78,7 @@
         "typeinfo": "cpp",
         "__nullptr": "cpp",
         "__string": "cpp",
-        "concepts": "cpp"
+        "concepts": "cpp",
+        "iostream": "cpp"
     }
 }

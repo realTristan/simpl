@@ -27,6 +27,28 @@ typedef struct RuntimeValue
 } RuntimeValue;
 
 /**
+ * Convert the runtime value to a string
+ * @param value The runtime value to convert
+ * @return The string representation of the runtime value
+*/
+std::string runtime_value_to_string(RuntimeValue *value)
+{
+  switch (value->type)
+  {
+  case ValueType::_NULL:
+    return "null";
+  case ValueType::OBJECT:
+    return "object";
+  case ValueType::NATIVEFN:
+    return "nativefn";
+  case ValueType::FN:
+    return "fn";
+  default:
+    return "unknown";
+  }
+}
+
+/**
  * NullValue
  */
 typedef struct NullValue : RuntimeValue
@@ -82,14 +104,14 @@ typedef struct NativeFnValue : RuntimeValue
 /**
  * FnValue
  */
-typedef struct FnValue : RuntimeValue
+/*typedef struct FnValue : RuntimeValue
 {
   ValueType type = ValueType::FN;
   std::string name;
   std::vector<std::string> params;
   Environment *env;
   std::vector<Stmt *> body;
-} FnValue;
+} FnValue;*/
 
 /**
  * Make - Helper class for creating runtime values
@@ -159,7 +181,7 @@ public:
   /**
    * Make a new function runtime value
    */
-  static FnValue *FN_VALUE(std::string name, std::vector<std::string> params, Environment *env, std::vector<Stmt *> body)
+  /*static FnValue *FN_VALUE(std::string name, std::vector<std::string> params, Environment *env, std::vector<Stmt *> body)
   {
     FnValue *v = new FnValue();
     v->name = name;
@@ -167,7 +189,7 @@ public:
     v->env = env;
     v->body = body;
     return v;
-  }
+  }*/
 };
 
 #endif // VALUES_HPP
